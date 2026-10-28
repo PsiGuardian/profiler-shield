@@ -16,7 +16,7 @@
 - [Exemples d’interface](examples.md)
 - [Fonctionnalités](features.md)
 
-[README](../README.md) · [SECURITY](../SECURITY.md) · [CONTRIBUTING](../CONTRIBUTING.md) · [CODE_OF_CONDUCT](../CODE_OF_CONDUCT.md) · [CHANGELOG](../CHANGELOG.md) · [examples](../examples/README.md)
+[README](../README.md) · [SECURITY](../SECURITY.md) · [CHANGELOG](../CHANGELOG.md) · [examples](../examples/README.md)
 
 ## Documentation par langue
 

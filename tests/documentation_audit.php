@@ -40,7 +40,9 @@ $docs=[];
 foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root.'/docs',FilesystemIterator::SKIP_DOTS)) as $file) {
     if($file->isFile() && $file->getExtension()==='md') {$docs[]=$file->getPathname();}
 }
-foreach (['README.md','INSTALLATION.md','SECURITY.md','CONTRIBUTING.md','CODE_OF_CONDUCT.md','CHANGELOG.md','examples/README.md'] as $file) {$docs[]=$root.'/'.$file;}
+// Root editorial pages may be intentionally removed; audit every one that exists.
+foreach (glob($root.'/*.md') as $file) {$docs[]=$file;}
+if (is_file($root.'/examples/README.md')) {$docs[]=$root.'/examples/README.md';}
 foreach($docs as $file) {
     $text=file_get_contents($file);
     if(preg_match('//u',$text)!==1 || str_contains($text,"\xEF\xBF\xBD")) {$errors[]=$file.': invalid UTF-8';}

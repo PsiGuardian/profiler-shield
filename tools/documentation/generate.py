@@ -109,9 +109,8 @@ for locale,label in locales.items():
 fr=ROOT/'docs/translations/fr_FR'
 for name in ['commands.md','architecture.md','authentication.md','contrat-securite.md','desinstallation.md','enrolement-totp.md','error-pages.md','reglages.md','localization.md','security.md','contributing.md','code-of-conduct.md','examples.md','features.md']:
     (ROOT/'docs'/name).write_text((fr/name).read_text())
-for target,source in [('SECURITY.md','security.md'),('CONTRIBUTING.md','contributing.md'),('CODE_OF_CONDUCT.md','code-of-conduct.md'),('CHANGELOG.md','features.md')]:
-    text=(fr/source).read_text().replace('(README.md)','(docs/README.md)').replace('(security.md)','(SECURITY.md)').replace('(examples.md)','(docs/examples.md)')
-    (ROOT/target).write_text(text)
+# Root editorial files are maintained by hand. Never recreate deleted files or
+# overwrite SECURITY.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md or CHANGELOG.md.
 (ROOT/'examples/README.md').write_text((fr/'examples.md').read_text().replace('(README.md)','(../docs/README.md)'))
 original=(ROOT/'docs/installation/fr_FR.md').read_text()
 (ROOT/'docs/installation.md').write_text(original.replace('../translations/fr_FR/','translations/fr_FR/'))
@@ -121,7 +120,8 @@ translation_index='# Documentation · 28 variantes régionales\n\n'+''.join(f'- 
 index='# Sommaire de la documentation\n\n'
 fr_titles={'installation.md':'Installation et premier accès','commands.md':'Toutes les commandes','reglages.md':'Options et réglages','authentication.md':'Authentification et simulateur','enrolement-totp.md':'Authentificateur TOTP','error-pages.md':'Pages d’erreur publiques','architecture.md':'Architecture et frontières de confiance','contrat-securite.md':'Invariants de sécurité','desinstallation.md':'Désinstallation et données','localization.md':'Traductions et contrôles','security.md':'Politique de sécurité','contributing.md':'Contribuer','code-of-conduct.md':'Code de conduite','examples.md':'Exemples d’interface','features.md':'Fonctionnalités'}
 index+=''.join(f'- [{title}]({name})\n' for name,title in fr_titles.items())
-index+='\n[README](../README.md) · [SECURITY](../SECURITY.md) · [CONTRIBUTING](../CONTRIBUTING.md) · [CODE_OF_CONDUCT](../CODE_OF_CONDUCT.md) · [CHANGELOG](../CHANGELOG.md) · [examples](../examples/README.md)\n'
+editorial_links=[('README','README.md'),('SECURITY','SECURITY.md'),('CONTRIBUTING','CONTRIBUTING.md'),('CODE_OF_CONDUCT','CODE_OF_CONDUCT.md'),('CHANGELOG','CHANGELOG.md'),('examples','examples/README.md')]
+index+='\n'+' · '.join(f'[{label}](../{path})' for label,path in editorial_links if (ROOT/path).is_file())+'\n'
 index+='\n## Documentation par langue\n\n'+''.join(f'- [{label}](translations/{locale}/README.md) · [Installation](installation/{locale}.md)\n' for locale,label in locales.items())
 (ROOT/'docs/README.md').write_text(index)
 readme=ROOT/'README.md';text=readme.read_text()

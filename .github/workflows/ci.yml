@@ -37,6 +37,8 @@ jobs:
         with:
           node-version: '22'
       - run: node tests/password_model.js
+      - name: Preserve manually maintained and deleted documentation
+        run: python3 tests/documentation_generator.py
       - name: Documentation sources and generated pages stay synchronized
         run: |
           python3 tools/documentation/generate.py
