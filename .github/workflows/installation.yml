@@ -1,0 +1,90 @@
+name: Composer installation
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  first-access-message:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {php: '8.3', symfony: '5.4'}
+          - {php: '8.3', symfony: '6.4'}
+          - {php: '8.3', symfony: '7.4'}
+          - {php: '8.4', symfony: '8.1'}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          extensions: openssl, xml, mbstring, curl, zip, tokenizer
+          coverage: none
+      - name: Create an isolated Composer host
+        env:
+          SYMFONY_BRANCH: ${{ matrix.symfony }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/guardian-flex-host"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          host = Path(os.environ['RUNNER_TEMP']) / 'guardian-flex-host'
+          metadata = {
+              'name': 'guardian/synthetic-flex-host',
+              'type': 'project',
+              'repositories': [{'type': 'vcs', 'url': 'https://github.com/PsiGuardian/profiler-shield'}],
+              'require': {},
+              'require-dev': {
+                  'symfony/framework-bundle': os.environ['SYMFONY_BRANCH'] + '.*',
+                  'omegaguardian/profiler-shield': 'dev-main'
+              },
+          }
+          (host / 'bin').mkdir()
+          (host / 'bin/console').write_text('<?php // synthetic host marker, test fixture only\n')
+          (host / 'config').mkdir()
+          (host / 'config/bundles.php').write_text('<?php return [];\n')
+          (host / 'composer.json').write_text(json.dumps(metadata, indent=2) + '\n')
+          PY
+      - name: Install from public GitHub repositories
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd "$RUNNER_TEMP/guardian-flex-host"
+          composer config --auth github-oauth.github.com "$GH_TOKEN"
+          set -o pipefail
+          composer update --no-interaction --prefer-dist 2>&1 | tee install.log
+      - name: Verify standard bundle and read-only local help
+        run: |
+          cd "$RUNNER_TEMP/guardian-flex-host"
+          php vendor/bin/guardian --help | tee help.log
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          package = json.loads(Path('vendor/omegaguardian/profiler-shield/composer.json').read_text())
+          assert package['type'] == 'symfony-bundle'
+          assert 'composer-plugin-api' not in package['require']
+          assert 'class' not in package.get('extra', {})
+          assert package['bin'] == ['bin/guardian']
+          assert not Path('vendor/omegaguardian/profiler-shield/src/Composer/Plugin.php').exists()
+          for token in ['guardian setup', 'guardian:access', 'initial-admin-credentials.txt', 'guardian:uninstall --purge']:
+              assert token in Path('help.log').read_text()
+          assert not Path('.guardian-shield').exists()
+          assert not Path('.env.local').exists()
+          assert Path('config/bundles.php').read_text() == '<?php return [];\n'
+          assert 'Do you trust' not in Path('install.log').read_text()
+          assert 'Do you want to execute this recipe' not in Path('install.log').read_text()
+          print('Bundle metadata, local help and explicit configuration verified')
+          PY
+      - name: Remove the standard package with normal Composer
+        run: |
+          cd "$RUNNER_TEMP/guardian-flex-host"
+          set -o pipefail
+          composer remove --dev omegaguardian/profiler-shield --no-interaction 2>&1 | tee removal.log
+          python3 - <<'PY'
+          from pathlib import Path
+          assert not Path('vendor/omegaguardian/profiler-shield').exists()
+          assert Path('config/bundles.php').read_text() == '<?php return [];\n'
+          assert 'Do you trust' not in Path('removal.log').read_text()
+          print('Single standard package removed without trust prompt')
+          PY

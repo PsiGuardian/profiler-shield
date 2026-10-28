@@ -1,0 +1,15 @@
+name: Proposition de fonctionnalité
+description: Proposer une amélioration fonctionnelle
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: usecase
+    attributes:
+      label: Cas concret et problème à résoudre
+    validations:
+      required: true
+  - type: textarea
+    id: costs
+    attributes:
+      label: Impacts sur la sécurité, la disponibilité et l’ergonomie

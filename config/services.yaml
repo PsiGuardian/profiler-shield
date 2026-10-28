@@ -1,0 +1,145 @@
+services:
+    omega_guardian.command.access:
+        class: OmegaGuardian\ProfilerShield\Command\AccessCommand
+        arguments: ['@omega_guardian.store']
+        tags:
+            - { name: console.command, command: 'guardian:access' }
+
+    omega_guardian.command.login_unlock:
+        class: OmegaGuardian\ProfilerShield\Command\LoginUnlockCommand
+        arguments: ['@omega_guardian.store', '@omega_guardian.audit']
+        tags:
+            - { name: console.command, command: 'guardian:login:unlock' }
+
+    omega_guardian.command.password_benchmark:
+        class: OmegaGuardian\ProfilerShield\Command\PasswordBenchmarkCommand
+        tags:
+            - { name: console.command, command: 'guardian:password:benchmark' }
+
+    omega_guardian.store:
+        class: OmegaGuardian\ProfilerShield\Storage\FileStore
+        arguments: ['%kernel.project_dir%/.guardian-shield']
+
+    omega_guardian.settings:
+        class: OmegaGuardian\ProfilerShield\Security\Settings
+        arguments: ['@omega_guardian.store']
+
+    omega_guardian.accounts:
+        class: OmegaGuardian\ProfilerShield\Security\Accounts
+        arguments: ['@omega_guardian.store']
+
+    omega_guardian.sessions:
+        class: OmegaGuardian\ProfilerShield\Security\Sessions
+        arguments: ['@omega_guardian.store', '@omega_guardian.settings']
+
+    omega_guardian.policy:
+        class: OmegaGuardian\ProfilerShield\Security\Policy
+        arguments: ['@omega_guardian.settings', '@omega_guardian.store']
+
+    omega_guardian.audit:
+        class: OmegaGuardian\ProfilerShield\Security\Audit
+        arguments: ['@omega_guardian.store']
+
+    omega_guardian.totp:
+        class: OmegaGuardian\ProfilerShield\Security\Totp
+
+    # Catalogues localisés avec traduction Symfony facultative.
+    omega_guardian.i18n:
+        class: OmegaGuardian\ProfilerShield\I18n\UiTranslator
+        arguments: ['@?translator']
+
+    # Point de contrôle partagé : mêmes droits pour la route, les erreurs
+    # détaillées et les en-têtes de profilage.
+    omega_guardian.diagnostic_access:
+        class: OmegaGuardian\ProfilerShield\Security\DiagnosticAccess
+        arguments: ['@omega_guardian.sessions', '@omega_guardian.accounts', '@omega_guardian.policy']
+
+    omega_guardian.events:
+        class: OmegaGuardian\ProfilerShield\EventListener\GuardianSubscriber
+        arguments: ['@omega_guardian.sessions', '@omega_guardian.policy', '@omega_guardian.settings', '@omega_guardian.audit', '@omega_guardian.accounts', '@omega_guardian.diagnostic_access', '@omega_guardian.public_errors']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    omega_guardian.controller:
+        class: OmegaGuardian\ProfilerShield\Controller\GuardianController
+        arguments: ['@omega_guardian.store', '@omega_guardian.settings', '@omega_guardian.accounts', '@omega_guardian.sessions', '@omega_guardian.policy', '@omega_guardian.audit', '@omega_guardian.totp', '@omega_guardian.i18n']
+        public: true
+
+    omega_guardian.command.install:
+        class: OmegaGuardian\ProfilerShield\Command\InstallCommand
+        arguments: ['@omega_guardian.accounts', '@omega_guardian.store']
+        tags:
+            - { name: console.command, command: 'guardian:install' }
+
+    omega_guardian.command.doctor:
+        class: OmegaGuardian\ProfilerShield\Command\DoctorCommand
+        arguments: ['@omega_guardian.settings', '@omega_guardian.store', '@omega_guardian.accounts', '%kernel.project_dir%']
+        tags:
+            - { name: console.command, command: 'guardian:doctor' }
+
+    omega_guardian.command.emergency:
+        class: OmegaGuardian\ProfilerShield\Command\EmergencyCommand
+        arguments: ['@omega_guardian.store', '@omega_guardian.accounts', '@omega_guardian.audit']
+        tags:
+            - { name: console.command, command: 'guardian:emergency' }
+
+    omega_guardian.command.alerts:
+        class: OmegaGuardian\ProfilerShield\Command\AlertCommand
+        arguments: ['@omega_guardian.store']
+        tags:
+            - { name: console.command, command: 'guardian:alerts:flush' }
+
+    omega_guardian.command.policy_reset:
+        class: OmegaGuardian\ProfilerShield\Command\PolicyResetCommand
+        arguments: ['@omega_guardian.settings']
+        tags:
+            - { name: console.command, command: 'guardian:policy:reset' }
+
+    # Injection facultative : le Profiler n'existe pas en environnement prod.
+    omega_guardian.collection:
+        class: OmegaGuardian\ProfilerShield\EventListener\CollectionSubscriber
+        arguments: ['@?profiler', '@omega_guardian.sessions', '@omega_guardian.accounts', '@omega_guardian.policy']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    omega_guardian.command.lockdown:
+        class: OmegaGuardian\ProfilerShield\Command\LockdownCommand
+        arguments: ['@omega_guardian.store']
+        tags:
+            - { name: console.command, command: 'guardian:lockdown' }
+
+    omega_guardian.command.mfa_reset:
+        class: OmegaGuardian\ProfilerShield\Command\MfaResetCommand
+        arguments: ['@omega_guardian.accounts', '@omega_guardian.sessions', '@omega_guardian.audit']
+        tags:
+            - { name: console.command, command: 'guardian:mfa:reset' }
+
+    omega_guardian.command.password_reset:
+        class: OmegaGuardian\ProfilerShield\Command\PasswordResetCommand
+        arguments: ['@omega_guardian.accounts', '@omega_guardian.sessions', '@omega_guardian.audit']
+        tags:
+            - { name: console.command, command: 'guardian:password:reset' }
+
+    # Aucun rendu de template d'erreur n'est exigé en l'absence de Twig.
+    omega_guardian.public_errors:
+        class: OmegaGuardian\ProfilerShield\Security\PublicErrorRenderer
+        arguments: ['@omega_guardian.settings', '%kernel.project_dir%', '@?twig']
+
+    omega_guardian.privacy:
+        class: OmegaGuardian\ProfilerShield\EventListener\PrivacySubscriber
+        arguments: ['@omega_guardian.sessions', '@omega_guardian.accounts', '@omega_guardian.policy', '@omega_guardian.diagnostic_access', '@omega_guardian.public_errors']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    omega_guardian.command.setup:
+        class: OmegaGuardian\ProfilerShield\Command\SetupCommand
+        arguments: ['%kernel.project_dir%', '@omega_guardian.store', '@omega_guardian.accounts']
+        tags:
+            - { name: console.command, command: 'guardian:setup' }
+
+
+    omega_guardian.command.uninstall:
+        class: OmegaGuardian\ProfilerShield\Command\UninstallCommand
+        arguments: ['%kernel.project_dir%']
+        tags:
+            - { name: console.command, command: 'guardian:uninstall' }

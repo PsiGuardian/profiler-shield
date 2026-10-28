@@ -1,0 +1,11 @@
+# ANCIEN EXEMPLE : utiliser plutôt routes_guardian.php.
+# Le support des variables dans les paths YAML varie suivant le chargeur et la version.
+# À copier dans config/routes/guardian.yaml de l'application.
+# ROUTE PRIVÉE : aucun lien dans les pages publiques ni les sitemaps.
+# Remplir GUARDIAN_LOGIN_PATH dans l'environnement de déploiement.
+# La prise en charge des placeholders dans `path` doit être validée dans
+# chaque version Symfony de la matrice de tests avant usage.
+omega_guardian_entry:
+    path: '%env(GUARDIAN_LOGIN_PATH)%'
+    controller: 'omega_guardian.controller::entry'
+    methods: [GET, POST]

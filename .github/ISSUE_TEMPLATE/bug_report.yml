@@ -1,0 +1,25 @@
+name: Rapport de bug
+description: Signaler un bug non sensible (pas de vulnérabilité)
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Ne signalez aucune vulnérabilité ici : utilisez SECURITY.md."
+  - type: input
+    id: version
+    attributes:
+      label: Version Guardian / Symfony / PHP
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction minimale et résultat attendu
+      description: Ne copiez aucun secret ou chemin de connexion privé.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs anonymisés et tests déjà effectués

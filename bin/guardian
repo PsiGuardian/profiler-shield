@@ -1,0 +1,83 @@
+#!/usr/bin/env php
+<?php
+/** Explicit local assistant. Composer never executes this file automatically. */
+$action = $argv[1] ?? '--help';
+if (in_array($action, ['--help', '-h', 'help'], true)) {
+    echo <<<'HELP'
+ΩGuardian — du téléchargement au premier accès
+
+Depuis la racine de votre application Symfony :
+  php vendor/bin/guardian setup
+
+Cet assistant active Guardian en dev/test puis lance, dans l'ordre :
+  cache:clear → guardian:setup --automatic → cache:clear → guardian:doctor → guardian:access
+Chaque étape doit réussir avant la suivante. Aucun secret n'est affiché.
+Ouvrez l'URL privée indiquée ; remplacez https://VOTRE-HOTE par votre origine HTTPS.
+Identifiants : .guardian-shield/initial-admin-credentials.txt (ou le coffre indiqué).
+Le premier accès impose le changement du mot de passe ; les comptes existants sont conservés.
+
+Retrait avec données conservées, AVANT le retrait Composer :
+  php bin/console guardian:uninstall --env=dev
+  composer remove --dev omegaguardian/profiler-shield
+  php bin/console cache:clear --env=dev
+Effacement facultatif : remplacer la première commande par guardian:uninstall --purge --env=dev.
+
+Guide local : vendor/omegaguardian/profiler-shield/INSTALLATION.md
+Sans argument ou avec --help : aucune modification. Avec setup : configuration locale explicite.
+HELP;
+    echo PHP_EOL;
+    exit(0);
+}
+if ($action !== 'setup' || count($argv) !== 2) {
+    fwrite(STDERR, "Commande inconnue. Utiliser : php vendor/bin/guardian --help\n");
+    exit(2);
+}
+$root = getcwd();
+if (!is_string($root) || !is_file($root.'/composer.json') || !is_file($root.'/bin/console')) {
+    fwrite(STDERR, "Exécuter depuis la racine Symfony contenant composer.json et bin/console.\n");
+    exit(1);
+}
+if (getenv('APP_ENV') === 'prod' || !function_exists('proc_open')) {
+    fwrite(STDERR, "Le setup nécessite un environnement de développement et proc_open disponible.\n");
+    exit(1);
+}
+foreach (['.env', '.env.local'] as $file) {
+    if (is_file($root.'/'.$file) && preg_match('/^\h*APP_ENV\h*=\h*["\']?prod["\']?\h*(?:#.*)?$/mi', (string)file_get_contents($root.'/'.$file))) {
+        fwrite(STDERR, "Le projet configure APP_ENV=prod ; aucune modification effectuée. Utiliser une copie de développement.\n");
+        exit(1);
+    }
+}
+$autoload = $GLOBALS['_composer_autoload_path'] ?? dirname(__DIR__, 3).'/autoload.php';
+if (!is_file($autoload)) { $autoload = dirname(__DIR__).'/vendor/autoload.php'; }
+if (!is_file($autoload)) {
+    fwrite(STDERR, "Dépendances absentes : terminer l'installation Composer avant le setup.\n");
+    exit(1);
+}
+require_once $autoload;
+try {
+    (new \OmegaGuardian\ProfilerShield\Installation\BundleRegistration())->register($root);
+    \OmegaGuardian\ProfilerShield\Util\ConfigurationChange::finish();
+    $steps = [
+        ['cache:clear', '--env=dev'],
+        ['guardian:setup', '--automatic', '--env=dev'],
+        ['cache:clear', '--env=dev'],
+        ['guardian:doctor', '--env=dev'],
+        ['guardian:access', '--env=dev'],
+    ];
+    foreach ($steps as $index => $arguments) {
+        fwrite(STDOUT, sprintf("\n[%d/%d] %s\n", $index + 1, count($steps), $arguments[0]));
+        fflush(STDOUT);
+        fflush(STDERR);
+        $process = proc_open([PHP_BINARY, $root.'/bin/console', ...$arguments], [STDIN, STDOUT, STDERR], $pipes, $root);
+        if (!is_resource($process)) { throw new \RuntimeException('Impossible de lancer Symfony CLI.'); }
+        $status = proc_close($process);
+        if ($status !== 0) {
+            fwrite(STDERR, "Étape interrompue. Corriger l'erreur ci-dessus, puis relancer le setup ; les étapes suivantes n'ont pas été exécutées.\n");
+            exit($status > 0 && $status < 256 ? $status : 1);
+        }
+    }
+    echo "\nConfiguration terminée. Ouvrez l'URL privée affichée et changez le mot de passe initial.\n";
+} catch (\Throwable $error) {
+    fwrite(STDERR, "Setup interrompu : ".$error->getMessage()."\nGuide local : vendor/omegaguardian/profiler-shield/INSTALLATION.md\n");
+    exit(1);
+}

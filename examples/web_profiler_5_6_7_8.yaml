@@ -1,0 +1,12 @@
+# À fusionner dans config/packages/dev/web_profiler.yaml
+# IMPORTANT : ne pas garder une configuration contradictioire ailleurs.
+# La toolbar DOIT être désactivée par Symfony lui-même.
+web_profiler:
+    toolbar: true
+    intercept_redirects: false
+
+# Refuse la collecte globale (y compris lors des requêtes publiques).
+# NE PAS ajouter collect_parameter : les paramètres URL sont publics !
+framework:
+    profiler:
+        collect: false

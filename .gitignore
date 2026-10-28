@@ -1,0 +1,10 @@
+/vendor/
+/.phpunit.result.cache
+/.phpunit.cache/
+/.idea/
+.env.local
+*.sqlite
+/var/
+
+# Coffre persistant Guardian : JAMAIS dans Git ou dans un artefact de déploiement.
+/.guardian-shield/

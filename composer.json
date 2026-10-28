@@ -1,0 +1,57 @@
+{
+    "name": "omegaguardian/profiler-shield",
+    "description": "Guardian Profiler Shield : contrôle d’accès autonome, assistant de configuration et protection des diagnostics Symfony.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "ext-openssl": "*",
+        "symfony/framework-bundle": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/http-kernel": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/routing": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/console": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/config": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/http-foundation": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/event-dispatcher": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "bacon/bacon-qr-code": "^2.0.4",
+        "ext-tokenizer": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5",
+        "symfony/web-profiler-bundle": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/twig-bundle": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
+        "symfony/yaml": "^5.4 || ^6.4 || ^7.4 || ~8.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "OmegaGuardian\\ProfilerShield\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OmegaGuardian\\ProfilerShield\\Tests\\": "tests/"
+        }
+    },
+    "keywords": [
+        "symfony",
+        "profiler",
+        "security",
+        "debug",
+        "development",
+        "access-control"
+    ],
+    "support": {
+        "email": "bundle-sec@omegaguardian.fr"
+    },
+    "scripts": {
+        "test": "@php tools/test.php",
+        "test:translations": "@php tests/translation_audit.php --strict",
+        "release:check": "@php tools/release-gate.php",
+        "test:password-model": "node tests/password_model.js",
+        "test:authentication": "@php tests/authentication_security.php"
+    },
+    "bin": [
+        "bin/guardian"
+    ]
+}
