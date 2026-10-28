@@ -1,3 +1,7 @@
 # Code de conduite
 
-Les échanges techniques doivent être respectueux, précis et centrés sur les faits. Sont proscrits le harcèlement, les attaques personnelles, la publication de données privées et les révélations de vulnérabilités non coordonnées. Les mainteneurs peuvent modérer les échanges et restreindre les comptes contrevenants. Les questions de sécurité suivent `SECURITY.md`.
+[Sommaire de la documentation](docs/README.md)
+
+Échanges respectueux, précis et factuels. Harcèlement, attaques personnelles, données privées et divulgation non coordonnée de vulnérabilités sont interdits. Les mainteneurs peuvent modérer et restreindre les comptes. Suivre la politique de sécurité pour les signalements sensibles.
+
+[Politique de sécurité](SECURITY.md)

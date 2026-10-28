@@ -42,7 +42,7 @@ php bin/console cache:clear --env=dev
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. कमांड संदर्भ
 
 सहायता कमांड समझाती है। प्रवेश कमांड पैनल का पता बताता है; निदान कॉन्फ़िगरेशन जाँचता है। विश्वसनीय स्थानीय पहुँच आवश्यक है।
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[कमांड संदर्भ](../translations/hi_IN/commands.md) · [दस्तावेज़ सूची](../translations/hi_IN/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

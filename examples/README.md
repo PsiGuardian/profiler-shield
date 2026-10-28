@@ -1,3 +1,8 @@
-# Local interface fixtures
+# Exemples d’interface
 
-Run `GUARDIAN_EXPORT_PREVIEW=1 php tests/flow_smoke.php` to generate disposable HTML views for interface development. They use synthetic accounts and destroyed test sessions; they are not connected panels and must not be published as an administration service. Generated preview HTML is excluded from the release archives.
+[Sommaire de la documentation](../docs/README.md)
+
+Génère des vues HTML jetables avec comptes synthétiques et sessions de test détruites. Ce ne sont pas des panneaux connectés ; ne pas publier comme service d’administration. Les prévisualisations sont exclues des archives distribuées.
+```bash
+GUARDIAN_EXPORT_PREVIEW=1 php tests/flow_smoke.php
+```

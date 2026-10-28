@@ -1,24 +1,39 @@
-# Enrôler votre authentificateur TOTP
+# Double authentification personnelle
 
-## Parcours administrateur
+[Sommaire de la documentation](README.md)
 
-1. Connectez-vous à Guardian puis ouvrez **Configuration → Double authentification personnelle**.
-2. Saisissez **le mot de passe de connexion à votre compte Guardian** (pas votre code TOTP, ni votre mot de passe Symfony). Il est vérifié **une seule fois**.
-3. Scannez le QR affiché depuis l'application TOTP de votre choix. Le QR est produit localement par le serveur avec une bibliothèque PHP. Il n'est jamais envoyé à un générateur QR externe.
-4. Saisissez uniquement le **code à six chiffres** affiché par l'application. L'enrôlement est immédiatement activé si le code est correct.
 
-Si vous ne pouvez pas scanner, copiez manuellement la clé secrète affichée. Elle est aussi sensible qu'un mot de passe : ne la partagez pas, ne la téléversez pas, ne la collez pas dans DuckDuckGo et ne la prenez pas en photo.
+## Double authentification personnelle
 
-**Vie privée :** lorsque votre application TOTP propose d'associer une URL ou un site au compte, utilisez seulement « ΩGuardian » (ou un alias neutre). N'indiquez pas l'URL secrète du site Symfony. L'URI `otpauth://` émise par Guardian porte un nom de fournisseur neutre et le nom du compte, **sans le domaine de l'application**.
+Activez un code temporaire sur votre compte Guardian, sans service QR externe.
 
-## Si le code est erroné
+Chaque personne enrôle son propre secret TOTP et confirme un code. Activer l’exigence MFA bloque le profiler pour les comptes non enrôlés. L’affichage du QR code reste local au portail. Prévoyez une récupération administrative avant d’imposer cette protection à toute l’équipe.
 
-Le panneau reste ouvert avec son QR et son formulaire. Il n'est pas nécessaire de retaper le mot de passe. Les secrets provisoires expirent au bout de dix minutes ou après cinq échecs ; la configuration peut alors être recommencée.
+## 1. Confirmez votre identité
 
-## Si le QR ne s'affiche pas
+Utilisez le mot de passe avec lequel vous vous connectez à Guardian. Il sera demandé une seule fois pour cette opération.
 
-La clé de saisie manuelle reste disponible. Vérifiez l'installation Composer de `bacon/bacon-qr-code` et la présence de `ext-iconv`. Le générateur SVG local ne nécessite ni GD, ni XMLWriter, ni accès réseau pour produire une image.
+## 2. Scannez le QR depuis votre authentificateur
 
-## Important
+Le QR est généré localement par Guardian, sans aucun appel à un service externe.
 
-Le compte ne peut pas réutiliser immédiatement le code utilisé à la confirmation : Guardian consomme son compteur pour réduire le risque de rejeu. La réinitialisation du MFA reste possible via la commande administrative locale.
+## 3. Confirmez un code à six chiffres
+
+Saisissez le code affiché par votre application. Aucun second mot de passe n’est demandé.
+
+## Confidentialité : n’indiquez pas l’URL du site
+
+Si votre application demande un nom ou un site, indiquez seulement « ΩGuardian » (ou un alias neutre). Ne saisissez pas l’adresse de votre instance Symfony. N’utilisez jamais un générateur QR en ligne : il recevrait votre secret.
+
+À conserver privée. Elle donne la possibilité de générer vos codes TOTP. Ne la partagez pas et évitez les captures d’écran.
+
+Le secret provisoire expire après 10 minutes ou 5 codes incorrects ; recommencer alors la configuration. Un code erroné conserve le formulaire sans redemander le mot de passe. Le compteur du code de confirmation est consommé pour éviter son rejeu. Le QR SVG utilise bacon/bacon-qr-code et ext-iconv, sans GD, XMLWriter ni réseau. La saisie manuelle reste possible. L’URI otpauth utilise un fournisseur neutre et le compte, sans domaine du site ; ne jamais partager le secret ou l’URL privée.
+
+## Récupération et vérifications
+
+Efface le secret TOTP et le compteur du compte username, révoque ses sessions et journalise l’action. Enrôler un nouvel authentificateur ; l’exigence MFA globale n’est pas désactivée et peut continuer à interdire le profiler.
+
+
+```bash
+php bin/console guardian:mfa:reset admin --env=dev
+```

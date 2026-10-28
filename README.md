@@ -50,6 +50,8 @@ Chaque guide couvre l’installation avec Composer, la configuration, le premier
 | [English · United States](docs/installation/en_US.md) | `en_US` |
 | [English · Canada](docs/installation/en_CA.md) | `en_CA` |
 
+[Sommaire de toute la documentation](docs/README.md) · [Référence de toutes les commandes](docs/commands.md) · [Documentation dans les 28 variantes régionales](docs/translations/README.md)
+
 ## Protections
 
 - Comptes administrateur, développeur et sécurité ; sessions révocables.

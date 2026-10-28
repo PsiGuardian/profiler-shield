@@ -42,7 +42,7 @@ Para borrar también cuentas y ajustes, sustituir el primer comando por el sigui
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Referencia de comandos
 
 La ayuda describe los comandos. El comando de acceso localiza el panel; el diagnóstico comprueba la configuración. Se requiere acceso local de confianza.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Referencia de comandos](../translations/es_ES/commands.md) · [Índice de documentación](../translations/es_ES/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

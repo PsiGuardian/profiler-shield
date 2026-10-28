@@ -42,7 +42,7 @@ Pentru a șterge și conturile și setările, înlocuiți prima comandă cu urm�
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Referința comenzilor
 
 Ajutorul descrie comenzile. Comanda de acces găsește panoul; diagnosticul verifică configurația. Este necesar acces local de încredere.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Referința comenzilor](../translations/ro_RO/commands.md) · [Cuprinsul documentației](../translations/ro_RO/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

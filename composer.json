@@ -49,7 +49,9 @@
         "test:translations": "@php tests/translation_audit.php --strict",
         "release:check": "@php tools/release-gate.php",
         "test:password-model": "node tests/password_model.js",
-        "test:authentication": "@php tests/authentication_security.php"
+        "test:authentication": "@php tests/authentication_security.php",
+        "test:docs": "@php tests/documentation_audit.php",
+        "docs:build": "python3 tools/documentation/generate.py"
     },
     "bin": [
         "bin/guardian"

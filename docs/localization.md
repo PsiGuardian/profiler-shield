@@ -1,12 +1,10 @@
 # Traductions
 
-Le portail propose 28 variantes régionales, avec 25 catalogues linguistiques. Les variantes anglaises partagent le même catalogue. Chaque variante dispose de son [guide d’installation](installation/).
+[Sommaire de la documentation](README.md)
 
-Les composants utilisent des clés de traduction et échappent les textes avant leur insertion dans le HTML. Les comptes, messages personnalisés et autres contenus saisis par les utilisateurs ne sont pas traduits. Les catalogues sont embarqués ; le portail ne transmet aucun texte à un service de traduction.
-
-L’audit contrôle la couverture des clés, les paramètres, l’UTF-8 et les commandes techniques. Les tests HTTP parcourent les vues du portail dans les 28 variantes.
-
+Le portail propose 28 variantes régionales et 25 catalogues ; les quatre variantes anglaises partagent leur catalogue. Les textes statiques sont traduits puis échappés. Les identifiants, messages personnalisés et données utilisateur ne sont pas traduits. Aucun service distant ne reçoit les textes. L’audit vérifie clés, paramètres, UTF-8, commandes techniques et liens de documentation ; les tests HTTP parcourent les vues dans chaque locale.
 ```bash
 php tests/translation_audit.php --strict
+php tests/documentation_audit.php
 composer test
 ```

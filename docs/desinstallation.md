@@ -1,31 +1,31 @@
-# Désinstaller ΩGuardian
+# Désinstallation et données
 
-Arrêter les workers de développement, puis préparer le retrait avant de retirer le code :
+[Sommaire de la documentation](README.md)
 
+Prépare le retrait des fichiers générés attribuables à Guardian ; conserve par défaut comptes, paramètres, journaux et clé. Arrêter les workers et exécuter avant composer remove, puis vider le cache dev et redémarrer. Les fichiers personnalisés ou sans preuve de provenance restent à examiner.
+
+--purge demande l’effacement des données avec confirmation, refus par défaut. --force nécessite --purge et confirme la destruction ; obligatoire avec --no-interaction pour une purge automatisée. Les coffres externes, liens et fichiers inconnus peuvent empêcher la purge complète : conserver la clé nécessaire et examiner le résultat.
 ```bash
 php bin/console guardian:uninstall --env=dev
 composer remove --dev omegaguardian/profiler-shield
 php bin/console cache:clear --env=dev
 ```
-
-Chaque commande doit réussir avant la suivante. Redémarrer les workers et vérifier le retour du profiler natif uniquement dans un environnement privé.
-
-## Conserver les données
-
-C’est le choix par défaut. Les comptes, paramètres, secrets MFA, journaux et clé de déchiffrement restent présents pour une réinstallation. Les fichiers générés sont retirés uniquement si le reçu d’installation et leurs empreintes prouvent leur provenance. Les fichiers personnalisés ou sans preuve de provenance sont conservés pour revue manuelle. Les variables et fichiers de l’application sont préservés.
-
-## Demander l’effacement
-
-Remplacer la première commande par :
-
+Sauvegarder le coffre avec sa clé et tester la restauration. Aucun mécanisme ne régénère automatiquement une clé perdue. Après retrait, vérifier le profiler uniquement en environnement privé. En production : APP_DEBUG=0, WebProfilerBundle et collecte désactivés. Une chaîne d’audit locale ne prouve pas l’intégrité d’un hôte compromis.
 ```bash
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-La commande demande une confirmation, non par défaut. Un refus annule cette commande sans modification. L’effacement doit être demandé avant Composer.
+## Référence des commandes
 
-Les coffres externes, liens symboliques, fichiers inconnus ou permissions insuffisantes empêchent un effacement complet automatique : la clé reste conservée si nécessaire. Ne pas supprimer une clé tant qu’un coffre doit rester exploitable. Une automatisation intentionnelle doit préciser `--purge --force --no-interaction`.
+--purge demande l’effacement des données avec confirmation, refus par défaut. --force nécessite --purge et confirme la destruction ; obligatoire avec --no-interaction pour une purge automatisée. Les coffres externes, liens et fichiers inconnus peuvent empêcher la purge complète : conserver la clé nécessaire et examiner le résultat.
 
-## Si le paquet a déjà été retiré
 
-Réinstaller temporairement la même version sans lancer le setup, puis préparer explicitement son retrait et retirer à nouveau le paquet. Examiner les configurations personnalisées manuellement. Le tutoriel complet se trouve dans [installation](installation.md).
+```bash
+php bin/console guardian:uninstall --purge --force --no-interaction --env=dev
+```
+
+
+[Référence des commandes](commands.md)
+
+
+Si Composer a déjà retiré le paquet, réinstaller temporairement la même version sans lancer setup. Exécuter guardian:uninstall, retirer à nouveau le paquet et vider le cache. Examiner manuellement les configurations personnalisées.
