@@ -1,5 +1,8 @@
-# Security Policy
+For security vulnerabilities, bug reports, feature requests, or suggestions for improvements and modifications, please contact us at [bundle-sec@omegaguardian.fr](mailto:bundle-sec@omegaguardian.fr).
 
-[Sommaire de la documentation](docs/README.md)
+Alternatively, you can use our GitHub issue templates:
 
-For security vulnerability reports, bug reports, feature requests, or suggestions for improvements or modifications, please contact us at bundle-sec@omegaguardian.fr.
+- **[Bug Report](https://github.com/PsiGuardian/profiler-shield/issues/new?template=bug_report.yml)** — Report bugs or unexpected behavior.
+- **[Feature Request](https://github.com/PsiGuardian/profiler-shield/issues/new?template=feature_request.yml)** — Suggest new features, improvements, or modifications.
+
+**Security vulnerabilities must be reported privately by email, not through public GitHub issues.**
