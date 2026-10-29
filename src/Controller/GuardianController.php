@@ -713,7 +713,6 @@ final class GuardianController
             $html.='<div class="mfa-step"><span class="step-index">02</span><div><strong>'.$t('mfa.step2').'</strong><p>'.$t('mfa.step2_help').'</p></div></div>'
                 .'<div class="mfa-setup-help mfa-manual-setup"><div class="mfa-privacy-note"><strong>'.$t('mfa.privacy_title').'</strong><p>'.$t('mfa.privacy_help').'</p></div>'
                 .'<label class="input-label" for="guardian-secret">'.$t('mfa.manual_secret').'<input id="guardian-secret" class="mfa-secret" type="text" value="'.Html::e($secret).'" readonly spellcheck="false" autocomplete="off"></label>'
-                .'<p class="hint">'.$t('mfa.scan_help').'</p>'
                 .'<p class="hint">'.$t('mfa.manual_help').'</p></div>'
                 .'<div class="mfa-step"><span class="step-index">03</span><div><strong>'.$t('mfa.step3').'</strong><p>'.$t('mfa.step3_help').'</p></div></div>'
                 .'<form method="post" class="mfa-confirm-form" action="#guardian-mfa"><input type="hidden" name="action" value="mfa_confirm">'
