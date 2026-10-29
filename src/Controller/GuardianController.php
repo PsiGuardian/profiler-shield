@@ -707,27 +707,14 @@ final class GuardianController
                 .'<small>'.$t('mfa.not_otp').'</small></label><button type="submit">'.$t('mfa.start').' →</button></form>';
         } else {
             $secret=$this->totp->decrypt($session['pending_totp']);
-            // L'issuer est volontairement neutre : aucune URL du serveur
-            // hébergeant le profiler n'est injectée dans l'application TOTP.
-            $issuer='OmegaGuardian';
-            $account=$session['username'];
-            $uri='otpauth://totp/'.rawurlencode($issuer).':'.rawurlencode($account)
-                .'?secret='.rawurlencode($secret).'&issuer='.rawurlencode($issuer).'&algorithm=SHA1&digits=6&period=30';
-            $qr='';
-            try {
-                $svg=\OmegaGuardian\ProfilerShield\Security\LocalQrCode::renderSvg($uri);
-                $qr='<img class="mfa-qr" width="224" height="224" alt="'.$t('mfa.qr_alt').'" src="data:image/svg+xml;base64,'.base64_encode($svg).'">';
-            } catch (\Throwable $error) {
-                // Le code manuel doit rester disponible en cas d'extension
-                // XMLWriter absente. On n'envoie jamais l'URI à un tiers.
-                $qr='<div class="mfa-qr-error">'.$t('mfa.qr_unavailable').'</div>';
-            }
+            // Manual TOTP enrolment: the Base32 key is shown only in the
+            // authenticated pending-setup view. No QR renderer, URI or
+            // external service is needed. Existing TOTP verification stays intact.
             $html.='<div class="mfa-step"><span class="step-index">02</span><div><strong>'.$t('mfa.step2').'</strong><p>'.$t('mfa.step2_help').'</p></div></div>'
-                .'<div class="mfa-setup-grid"><div class="mfa-qr-card"><span class="mfa-qr-caption">'.$t('mfa.local_only').'</span>'.$qr
-                .'<small>'.$t('mfa.scan_help').'</small></div>'
-                .'<div class="mfa-setup-help"><div class="mfa-privacy-note"><strong>'.$t('mfa.privacy_title').'</strong><p>'.$t('mfa.privacy_help').'</p></div>'
+                .'<div class="mfa-setup-help mfa-manual-setup"><div class="mfa-privacy-note"><strong>'.$t('mfa.privacy_title').'</strong><p>'.$t('mfa.privacy_help').'</p></div>'
                 .'<label class="input-label" for="guardian-secret">'.$t('mfa.manual_secret').'<input id="guardian-secret" class="mfa-secret" type="text" value="'.Html::e($secret).'" readonly spellcheck="false" autocomplete="off"></label>'
-                .'<p class="hint">'.$t('mfa.manual_help').'</p></div></div>'
+                .'<p class="hint">'.$t('mfa.scan_help').'</p>'
+                .'<p class="hint">'.$t('mfa.manual_help').'</p></div>'
                 .'<div class="mfa-step"><span class="step-index">03</span><div><strong>'.$t('mfa.step3').'</strong><p>'.$t('mfa.step3_help').'</p></div></div>'
                 .'<form method="post" class="mfa-confirm-form" action="#guardian-mfa"><input type="hidden" name="action" value="mfa_confirm">'
                 .'<input type="hidden" name="_csrf" value="'.Html::e($csrf).'">'
