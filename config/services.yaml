@@ -121,6 +121,9 @@ services:
             - { name: console.command, command: 'guardian:password:reset' }
 
     # Aucun rendu de template d'erreur n'est exigé en l'absence de Twig.
+    omega_guardian.public_error_registry:
+        class: OmegaGuardian\ProfilerShield\Security\PublicErrorRegistry
+
     omega_guardian.public_errors:
         class: OmegaGuardian\ProfilerShield\Security\PublicErrorRenderer
         arguments: ['@omega_guardian.settings', '%kernel.project_dir%', '@?twig']
