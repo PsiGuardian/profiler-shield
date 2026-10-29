@@ -12,4 +12,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 final class OmegaGuardianProfilerShieldBundle extends Bundle
 {
+    public function build(\Symfony\Component\DependencyInjection\ContainerBuilder $container): void
+    {
+        parent::build($container);
+        $container->addCompilerPass(new \OmegaGuardian\ProfilerShield\DependencyInjection\Compiler\PublicErrorMapperPass());
+    }
 }
