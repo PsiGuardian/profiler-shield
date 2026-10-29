@@ -1,0 +1,41 @@
+name: One-time manual TOTP language/docs migration
+on:
+  push:
+    branches: [dev-1.0.1]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  migrate:
+    if: github.repository == 'PsiGuardian/profiler-shield'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Prepare migration and regenerate all 28 regional documentation sets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! grep -q "'mfa.qr_alt'" translations/guardian.en.php; then
+            echo "Manual TOTP migration already completed — no change."
+            exit 0
+          fi
+          python3 tools/documentation/migrate_manual_totp.py
+          python3 tools/documentation/generate.py
+          php tests/translation_audit.php --strict
+          php tests/documentation_audit.php
+          if grep -R -nE 'bacon/bacon-qr-code|BaconQrCode|mfa\.qr_alt|mfa\.qr_unavailable' src translations docs tools/documentation/details.tsv; then
+            echo "Obsolete QR references remain."
+            exit 1
+          fi
+          git add -- translations docs tools/documentation/details.tsv
+          if git diff --cached --quiet; then
+            echo "No migrated content."
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'i18n(mfa): update 25 languages and 28 regional guides for manual TOTP'
+          git push origin HEAD:dev-1.0.1
