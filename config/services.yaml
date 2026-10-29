@@ -130,7 +130,7 @@ services:
 
     omega_guardian.privacy:
         class: OmegaGuardian\ProfilerShield\EventListener\PrivacySubscriber
-        arguments: ['@omega_guardian.sessions', '@omega_guardian.accounts', '@omega_guardian.policy', '@omega_guardian.diagnostic_access', '@omega_guardian.public_errors']
+        arguments: ['@omega_guardian.sessions', '@omega_guardian.accounts', '@omega_guardian.policy', '@omega_guardian.diagnostic_access', '@omega_guardian.public_errors', '@omega_guardian.public_error_registry']
         tags:
             - { name: kernel.event_subscriber }
 
