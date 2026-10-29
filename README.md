@@ -2,6 +2,23 @@
 
 Contrôle d’accès aux outils de diagnostic Symfony : comptes indépendants, authentification multifacteur, horaires, restrictions réseau et accès temporaires.
 
+## Démonstration en ligne · Live demo
+
+Testez Profiler Shield sur [Démos Kratos · Populorum](https://demos-kratos.omegaguardian.fr/).
+
+**[Ouvrir la connexion de démonstration](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+| Accès | Valeur |
+| --- | --- |
+| Site de démonstration | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Chemin de connexion | `/demo-profiler-shield-populorum` |
+| Identifiant public | `demo` |
+| Mot de passe public | `Populorum-Demo!2026` |
+
+Ces identifiants sont volontairement publics et réservés à cette instance fictive de démonstration. Ils donnent accès aux diagnostics de démo en lecture seule.
+
+Public demo credentials: use the login link above to explore the demonstration diagnostics in read-only mode.
+
 ## Installation
 
 Depuis la racine de l’application Symfony :
