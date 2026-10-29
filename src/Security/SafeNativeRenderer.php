@@ -1,7 +1,6 @@
 <?php
 namespace OmegaGuardian\ProfilerShield\Security;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -94,7 +93,7 @@ final class SafeNativeRenderer
                 $problem['code'] = $approved->code;
             }
             if ($format === 'problem-json') {
-                $response = new JsonResponse($problem, $status, $headers);
+                $response = new Response(json_encode($problem, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE), $status, $headers);
                 $response->headers->set('Content-Type', 'application/problem+json');
             } else {
                 $xml = '<?xml version="1.0" encoding="UTF-8"?>'
@@ -130,7 +129,7 @@ final class SafeNativeRenderer
             $payload = $approved !== null
                 ? ['error' => $error]
                 : ['message' => 'Request failed', 'error' => $error];
-            $response = new JsonResponse($payload, $status, $headers);
+            $response = new Response(json_encode($payload, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE), $status, $headers);
             // Preserve v1.0.0 API Content-Type including its charset.
             $response->headers->set('Content-Type', 'application/json; charset=UTF-8');
         } else {
