@@ -17,7 +17,8 @@ final class SafeNativeRenderer
     {
         // Symfony's _format is an explicit route contract. Its implicit
         // 'html' default is not, so do not let it override Accept.
-        $explicit = $request->attributes->get('_format');
+        $explicit = isset($request->attributes) && method_exists($request->attributes, 'get')
+            ? $request->attributes->get('_format') : null;
         if (is_string($explicit) && $explicit !== '') {
             $routeFormat = match (strtolower($explicit)) {
                 'json' => 'json', 'xml' => 'xml',
@@ -29,7 +30,8 @@ final class SafeNativeRenderer
                 return $routeFormat;
             }
         }
-        $accept = (string) $request->headers->get('Accept', '');
+        $accept = isset($request->headers) && method_exists($request->headers, 'get')
+            ? (string) $request->headers->get('Accept', '') : '';
         $fallback = str_starts_with($request->getPathInfo(), '/api/') ? 'json' : 'html';
         if ($accept === '') {
             return $fallback;
