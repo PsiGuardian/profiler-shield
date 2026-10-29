@@ -18,6 +18,21 @@
 
 [README](../README.md) · [SECURITY](../SECURITY.md) · [CHANGELOG](../CHANGELOG.md) · [examples](../examples/README.md)
 
+## Démonstration en ligne
+
+**[Ouvrir la connexion de démonstration](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Accès | Valeur |
+|---|---|
+| Site de démonstration | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Chemin de connexion | `/demo-profiler-shield-populorum` |
+| Identifiant public | `demo` |
+| Mot de passe public | `Populorum-Demo!2026` |
+
+
+Ces identifiants sont volontairement publics et réservés à cette instance fictive de démonstration. Les diagnostics de démo sont accessibles en lecture seule.
+
 ## Documentation par langue
 
 - [FR — Français · France](translations/fr_FR/README.md) · [Installation](installation/fr_FR.md)

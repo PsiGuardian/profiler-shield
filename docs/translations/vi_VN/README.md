@@ -18,4 +18,19 @@
 - [Ví dụ giao diện](examples.md)
 - [Tính năng](features.md)
 
+## Bản demo trực tuyến
+
+**[Mở trang đăng nhập demo](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Truy cập | Giá trị |
+|---|---|
+| Trang web demo | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Đường dẫn đăng nhập | `/demo-profiler-shield-populorum` |
+| Tên người dùng công khai | `demo` |
+| Mật khẩu công khai | `Populorum-Demo!2026` |
+
+
+Thông tin đăng nhập này được công khai có chủ đích và chỉ dành cho bản demo với dữ liệu hư cấu này. Chẩn đoán demo chỉ có thể được đọc.
+
 [Bản dịch](../README.md)

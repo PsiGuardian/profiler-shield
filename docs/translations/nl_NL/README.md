@@ -18,4 +18,19 @@
 - [Interfacevoorbeelden](examples.md)
 - [Functies](features.md)
 
+## Online demo
+
+**[Demo-aanmelding openen](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Toegang | Waarde |
+|---|---|
+| Demowebsite | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Aanmeldpad | `/demo-profiler-shield-populorum` |
+| Openbare gebruikersnaam | `demo` |
+| Openbaar wachtwoord | `Populorum-Demo!2026` |
+
+
+Deze inloggegevens zijn bewust openbaar en uitsluitend bedoeld voor deze demo met fictieve gegevens. De diagnostiek van de demo is alleen-lezen.
+
 [Vertalingen](../README.md)

@@ -49,6 +49,19 @@ class EditorialOwnershipTest(unittest.TestCase):
         self.assertEqual(pages, {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob('*.md')})
         self.assert_editorial_unchanged()
 
+    def test_every_regional_readme_includes_the_public_demo(self):
+        self.generate()
+        readmes = list((self.root / 'docs/translations').glob('*/README.md'))
+        self.assertEqual(28, len(readmes))
+        for readme in readmes:
+            content = readme.read_text()
+            self.assertIn('https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum', content)
+            self.assertIn('`demo`', content)
+            self.assertIn('`Populorum-Demo!2026`', content)
+        self.assertIn('Démonstration en ligne', (self.root / 'docs/translations/fr_FR/README.md').read_text())
+        self.assertIn('Online-Demo', (self.root / 'docs/translations/de_DE/README.md').read_text())
+        self.assertIn('Live demo', (self.root / 'docs/translations/en_US/README.md').read_text())
+
     def test_existing_editorial_pages_are_not_overwritten(self):
         for name in ('CONTRIBUTING.md', 'CODE_OF_CONDUCT.md'):
             self.editorial[name] = ('# Custom ' + name + '\n').encode()

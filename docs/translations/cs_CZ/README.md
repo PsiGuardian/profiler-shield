@@ -18,4 +18,19 @@
 - [Příklady rozhraní](examples.md)
 - [Funkce](features.md)
 
+## Živá ukázka
+
+**[Otevřít přihlášení do ukázky](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Přístup | Hodnota |
+|---|---|
+| Web ukázky | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Přihlašovací cesta | `/demo-profiler-shield-populorum` |
+| Veřejné uživatelské jméno | `demo` |
+| Veřejné heslo | `Populorum-Demo!2026` |
+
+
+Tyto přihlašovací údaje jsou záměrně veřejné a určené pouze pro tuto ukázku s fiktivními daty. Diagnostika ukázky je dostupná pouze pro čtení.
+
 [Překlady](../README.md)

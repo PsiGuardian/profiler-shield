@@ -18,4 +18,19 @@
 - [Exemple de interfață](examples.md)
 - [Funcționalități](features.md)
 
+## Demonstrație online
+
+**[Deschide autentificarea demonstrației](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Acces | Valoare |
+|---|---|
+| Site demonstrativ | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Calea de autentificare | `/demo-profiler-shield-populorum` |
+| Nume de utilizator public | `demo` |
+| Parolă publică | `Populorum-Demo!2026` |
+
+
+Aceste date de autentificare sunt intenționat publice și rezervate acestei demonstrații cu date fictive. Diagnosticul demonstrației este disponibil numai pentru citire.
+
 [Traduceri](../README.md)

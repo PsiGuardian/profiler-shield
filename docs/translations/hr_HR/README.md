@@ -18,4 +18,19 @@
 - [Primjeri sučelja](examples.md)
 - [Mogućnosti](features.md)
 
+## Demonstracija uživo
+
+**[Otvori prijavu za demonstraciju](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Pristup | Vrijednost |
+|---|---|
+| Demonstracijska stranica | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Putanja prijave | `/demo-profiler-shield-populorum` |
+| Javno korisničko ime | `demo` |
+| Javna lozinka | `Populorum-Demo!2026` |
+
+
+Ovi su podaci za prijavu namjerno javni i namijenjeni isključivo ovoj demonstraciji s izmišljenim podacima. Dijagnostika demonstracije dostupna je samo za čitanje.
+
 [Prijevodi](../README.md)

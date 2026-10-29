@@ -18,4 +18,19 @@
 - [画面の例](examples.md)
 - [機能](features.md)
 
+## オンラインデモ
+
+**[デモのログイン画面を開く](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| アクセス情報 | 値 |
+|---|---|
+| デモサイト | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| ログインパス | `/demo-profiler-shield-populorum` |
+| 公開ユーザー名 | `demo` |
+| 公開パスワード | `Populorum-Demo!2026` |
+
+
+これらの認証情報は意図的に公開されており、架空のデータを使用するこのデモ専用です。デモの診断情報は読み取り専用です。
+
 [翻訳](../README.md)

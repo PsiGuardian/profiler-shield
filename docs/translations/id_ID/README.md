@@ -18,4 +18,19 @@
 - [Contoh antarmuka](examples.md)
 - [Fitur](features.md)
 
+## Demo daring
+
+**[Buka halaman masuk demo](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Akses | Nilai |
+|---|---|
+| Situs demo | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Jalur masuk | `/demo-profiler-shield-populorum` |
+| Nama pengguna publik | `demo` |
+| Kata sandi publik | `Populorum-Demo!2026` |
+
+
+Kredensial ini sengaja dipublikasikan dan hanya untuk demo dengan data fiktif ini. Diagnostik demo tersedia dalam mode hanya baca.
+
 [Terjemahan](../README.md)

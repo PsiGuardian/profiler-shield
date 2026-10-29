@@ -18,4 +18,19 @@
 - [Príklady rozhrania](examples.md)
 - [Funkcie](features.md)
 
+## Živá ukážka
+
+**[Otvoriť prihlásenie do ukážky](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Prístup | Hodnota |
+|---|---|
+| Web ukážky | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Prihlasovacia cesta | `/demo-profiler-shield-populorum` |
+| Verejné používateľské meno | `demo` |
+| Verejné heslo | `Populorum-Demo!2026` |
+
+
+Tieto prihlasovacie údaje sú zámerne verejné a určené výhradne pre túto ukážku s fiktívnymi údajmi. Diagnostika ukážky je dostupná iba na čítanie.
+
 [Preklady](../README.md)

@@ -18,4 +18,19 @@
 - [Exemples d’interface](examples.md)
 - [Fonctionnalités](features.md)
 
+## Démonstration en ligne
+
+**[Ouvrir la connexion de démonstration](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Accès | Valeur |
+|---|---|
+| Site de démonstration | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Chemin de connexion | `/demo-profiler-shield-populorum` |
+| Identifiant public | `demo` |
+| Mot de passe public | `Populorum-Demo!2026` |
+
+
+Ces identifiants sont volontairement publics et réservés à cette instance fictive de démonstration. Les diagnostics de démo sont accessibles en lecture seule.
+
 [Traductions](../README.md)

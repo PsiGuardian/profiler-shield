@@ -10,6 +10,8 @@ def rows(name):
     for line in (HERE/name).read_text().splitlines():
         lang,body=line.split('\t',1);result[lang.strip()]=body.split('|')
     return result
+DEMO=rows('demo.tsv')
+assert len(DEMO)==25 and all(len(values)==9 for values in DEMO.values())
 C=rows('commands.tsv');D=rows('details.tsv');L=rows('localization.tsv'); LABELS=rows('labels.tsv'); OPERATIONS=rows('operations.tsv'); COMMUNITY=rows('community.tsv')
 assert len(C)==len(D)==len(L)==25
 assert all(len(v)==22 for v in C.values()) and all(len(v)==10 for v in D.values())
@@ -22,6 +24,21 @@ def section(title,*paragraphs):return '\n## '+title+'\n\n'+'\n\n'.join(paragraph
 def table(headers,values):
     def esc(v):return str(v).replace('|','&#124;').replace('\n',' ').replace('<','&lt;').replace('>','&gt;')
     return '\n'+'| '+' | '.join(map(esc,headers))+' |\n|'+'|'.join('---' for _ in headers)+'|\n'+''.join('| '+' | '.join(map(esc,row))+' |\n' for row in values)
+DEMO_URL = 'https://demos-kratos.omegaguardian.fr/'
+DEMO_PATH = '/demo-profiler-shield-populorum'
+DEMO_USERNAME = 'demo'
+DEMO_PASSWORD = 'Populorum-Demo!2026'
+
+def demo_section(lang):
+    title, link, access, value, site, path, username, password, note = DEMO[lang]
+    details = table([access, value], [
+        (site, f'[demos-kratos.omegaguardian.fr]({DEMO_URL})'),
+        (path, f'`{DEMO_PATH}`'),
+        (username, f'`{DEMO_USERNAME}`'),
+        (password, f'`{DEMO_PASSWORD}`'),
+    ])
+    return section(title, f'**[{link}]({DEMO_URL.rstrip("/")}{DEMO_PATH})**', details, note)
+
 def page(title,body,toc):return f'# {title}\n\n[{toc}](README.md)\n\n'+body
 
 def command_page(c,d,t):
@@ -103,6 +120,7 @@ for locale,label in locales.items():
     bodies['installation.md']=localized
     for name,body in bodies.items():(out/name).write_text(body.rstrip()+'\n')
     index=f'# {d[0]}\n\nΩGuardian Profiler Shield · {label}\n\n'+''.join(f'- [{title}]({name})\n' for name,title in titles.items())
+    index+=demo_section(lang)
     index+='\n['+d[3]+'](../README.md)\n'
     (out/'README.md').write_text(index)
 # French canonical documentation and root installation entry point.
@@ -122,6 +140,7 @@ fr_titles={'installation.md':'Installation et premier accès','commands.md':'Tou
 index+=''.join(f'- [{title}]({name})\n' for name,title in fr_titles.items())
 editorial_links=[('README','README.md'),('SECURITY','SECURITY.md'),('CONTRIBUTING','CONTRIBUTING.md'),('CODE_OF_CONDUCT','CODE_OF_CONDUCT.md'),('CHANGELOG','CHANGELOG.md'),('examples','examples/README.md')]
 index+='\n'+' · '.join(f'[{label}](../{path})' for label,path in editorial_links if (ROOT/path).is_file())+'\n'
+index+=demo_section('fr')
 index+='\n## Documentation par langue\n\n'+''.join(f'- [{label}](translations/{locale}/README.md) · [Installation](installation/{locale}.md)\n' for locale,label in locales.items())
 (ROOT/'docs/README.md').write_text(index)
 readme=ROOT/'README.md';text=readme.read_text()

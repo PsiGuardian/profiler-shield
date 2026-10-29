@@ -18,4 +18,19 @@
 - [界面示例](examples.md)
 - [功能](features.md)
 
+## 在线演示
+
+**[打开演示登录页面](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| 访问信息 | 值 |
+|---|---|
+| 演示网站 | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| 登录路径 | `/demo-profiler-shield-populorum` |
+| 公开用户名 | `demo` |
+| 公开密码 | `Populorum-Demo!2026` |
+
+
+这些登录凭据有意公开，仅供这个使用虚构数据的演示实例使用。演示诊断信息仅供读取。
+
 [翻译](../README.md)

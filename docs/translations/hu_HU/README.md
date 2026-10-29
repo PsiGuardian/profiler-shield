@@ -18,4 +18,19 @@
 - [Felületpéldák](examples.md)
 - [Funkciók](features.md)
 
+## Élő bemutató
+
+**[A bemutató bejelentkezésének megnyitása](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Hozzáférés | Érték |
+|---|---|
+| Bemutató weboldal | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Bejelentkezési útvonal | `/demo-profiler-shield-populorum` |
+| Nyilvános felhasználónév | `demo` |
+| Nyilvános jelszó | `Populorum-Demo!2026` |
+
+
+Ezek a bejelentkezési adatok szándékosan nyilvánosak, és kizárólag ehhez a kitalált adatokat használó bemutatóhoz tartoznak. A bemutató diagnosztikája csak olvasható.
+
 [Fordítások](../README.md)

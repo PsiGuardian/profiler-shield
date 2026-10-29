@@ -18,4 +18,19 @@
 - [Примеры интерфейса](examples.md)
 - [Возможности](features.md)
 
+## Онлайн-демонстрация
+
+**[Открыть вход в демонстрацию](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Доступ | Значение |
+|---|---|
+| Демонстрационный сайт | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Путь входа | `/demo-profiler-shield-populorum` |
+| Публичное имя пользователя | `demo` |
+| Публичный пароль | `Populorum-Demo!2026` |
+
+
+Эти учётные данные намеренно опубликованы и предназначены только для этой демонстрации с вымышленными данными. Диагностика демонстрации доступна только для чтения.
+
 [Переводы](../README.md)

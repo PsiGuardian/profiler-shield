@@ -18,4 +18,19 @@
 - [इंटरफ़ेस उदाहरण](examples.md)
 - [सुविधाएँ](features.md)
 
+## ऑनलाइन डेमो
+
+**[डेमो लॉगिन खोलें](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| पहुँच | मान |
+|---|---|
+| डेमो वेबसाइट | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| लॉगिन पथ | `/demo-profiler-shield-populorum` |
+| सार्वजनिक उपयोगकर्ता नाम | `demo` |
+| सार्वजनिक पासवर्ड | `Populorum-Demo!2026` |
+
+
+ये क्रेडेंशियल जानबूझकर सार्वजनिक हैं और केवल काल्पनिक डेटा वाले इस डेमो के लिए हैं। डेमो डायग्नोस्टिक्स केवल पढ़ने के लिए उपलब्ध हैं।
+
 [अनुवाद](../README.md)

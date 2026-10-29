@@ -18,4 +18,19 @@
 - [Contoh antara muka](examples.md)
 - [Ciri-ciri](features.md)
 
+## Demo dalam talian
+
+**[Buka halaman log masuk demo](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Akses | Nilai |
+|---|---|
+| Laman demo | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Laluan log masuk | `/demo-profiler-shield-populorum` |
+| Nama pengguna awam | `demo` |
+| Kata laluan awam | `Populorum-Demo!2026` |
+
+
+Maklumat log masuk ini sengaja diterbitkan dan dikhaskan untuk demo dengan data rekaan ini sahaja. Diagnostik demo tersedia dalam mod baca sahaja.
+
 [Terjemahan](../README.md)
