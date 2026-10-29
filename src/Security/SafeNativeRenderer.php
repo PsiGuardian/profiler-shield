@@ -131,6 +131,8 @@ final class SafeNativeRenderer
                 ? ['error' => $error]
                 : ['message' => 'Request failed', 'error' => $error];
             $response = new JsonResponse($payload, $status, $headers);
+            // Preserve v1.0.0 API Content-Type including its charset.
+            $response->headers->set('Content-Type', 'application/json; charset=UTF-8');
         } else {
             $response = new Response($approved?->publicMessage ?? $title, $status, $headers);
             $response->headers->set('Content-Type', 'text/plain; charset=UTF-8');
