@@ -5,17 +5,17 @@
 
 ## Double authentification personnelle
 
-Activez un code temporaire sur votre compte Guardian, sans service QR externe.
+Chaque personne enrôle son propre secret TOTP et confirme un code.
 
-Chaque personne enrôle son propre secret TOTP et confirme un code. Activer l’exigence MFA bloque le profiler pour les comptes non enrôlés. L’affichage du QR code reste local au portail. Prévoyez une récupération administrative avant d’imposer cette protection à toute l’équipe.
+Chaque personne enrôle son propre secret TOTP et confirme un code. Activer l’exigence MFA bloque le profiler pour les comptes non enrôlés. Prévoyez une récupération administrative avant d’imposer cette protection à toute l’équipe. Choisissez l’ajout manuel et saisissez la clé secrète affichée. Configurez SHA-1, six chiffres et une période de 30 secondes.
 
 ## 1. Confirmez votre identité
 
 Utilisez le mot de passe avec lequel vous vous connectez à Guardian. Il sera demandé une seule fois pour cette opération.
 
-## 2. Scannez le QR depuis votre authentificateur
+## 2. Saisissez la clé dans votre authentificateur
 
-Le QR est généré localement par Guardian, sans aucun appel à un service externe.
+Choisissez l’ajout manuel et saisissez la clé secrète affichée. Configurez SHA-1, six chiffres et une période de 30 secondes.
 
 ## 3. Confirmez un code à six chiffres
 
@@ -23,11 +23,11 @@ Saisissez le code affiché par votre application. Aucun second mot de passe n’
 
 ## Confidentialité : n’indiquez pas l’URL du site
 
-Si votre application demande un nom ou un site, indiquez seulement « ΩGuardian » (ou un alias neutre). Ne saisissez pas l’adresse de votre instance Symfony. N’utilisez jamais un générateur QR en ligne : il recevrait votre secret.
+Si votre application demande un nom ou un site, indiquez seulement « ΩGuardian » (ou un alias neutre). Ne saisissez pas l’adresse de votre instance Symfony.
 
 À conserver privée. Elle donne la possibilité de générer vos codes TOTP. Ne la partagez pas et évitez les captures d’écran.
 
-Le secret provisoire expire après 10 minutes ou 5 codes incorrects ; recommencer alors la configuration. Un code erroné conserve le formulaire sans redemander le mot de passe. Le compteur du code de confirmation est consommé pour éviter son rejeu. Le QR SVG utilise bacon/bacon-qr-code et ext-iconv, sans GD, XMLWriter ni réseau. La saisie manuelle reste possible. L’URI otpauth utilise un fournisseur neutre et le compte, sans domaine du site ; ne jamais partager le secret ou l’URL privée.
+Le secret provisoire expire après 10 minutes ou 5 codes incorrects ; recommencer alors la configuration. Un code erroné conserve le formulaire sans redemander le mot de passe. Le compteur du code de confirmation est consommé pour éviter son rejeu.
 
 ## Récupération et vérifications
 
