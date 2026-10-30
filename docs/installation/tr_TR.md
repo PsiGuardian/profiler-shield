@@ -42,7 +42,7 @@ Hesapları ve ayarları da silmek için ilk komutu aşağıdakiyle değiştirip 
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Komut başvurusu
 
 Yardım komutları açıklar. Erişim komutu paneli bulur; tanılama yapılandırmayı denetler. Güvenilir yerel erişim gereklidir.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Komut başvurusu](../translations/tr_TR/commands.md) · [Belge içindekiler](../translations/tr_TR/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

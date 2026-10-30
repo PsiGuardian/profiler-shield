@@ -42,7 +42,7 @@ A fiókok és beállítások törléséhez az első parancsot cserélje az aláb
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Parancsreferencia
 
 A súgó ismerteti a parancsokat. A hozzáférési parancs megkeresi a panelt; a diagnosztika ellenőrzi a beállításokat. Megbízható helyi hozzáférés szükséges.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Parancsreferencia](../translations/hu_HU/commands.md) · [Dokumentáció tartalma](../translations/hu_HU/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

@@ -42,7 +42,7 @@ Vervang voor het verwijderen van accounts en instellingen het eerste commando do
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Commando-overzicht
 
 De hulp beschrijft de commando’s. Het toegangscommando vindt het paneel; de diagnose controleert de configuratie. Betrouwbare lokale toegang is vereist.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Commando-overzicht](../translations/nl_NL/commands.md) · [Documentatie-inhoud](../translations/nl_NL/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

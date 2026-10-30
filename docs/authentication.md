@@ -1,49 +1,93 @@
-# Authentification et laboratoire de coût
+# Connexions et mots de passe
 
-## Premier accès
-
-La commande explicite `guardian:setup --automatic` crée un compte `admin` avec un secret généré par `random_int`, adapté à la politique active, de 32 caractères au minimum. Le secret ne figure pas dans les logs Composer. Il est écrit uniquement dans le fichier initial privé 0600. La route et la procédure sont annoncées à la fin de l’installation et restent consultables avec `guardian:access`.
-
-Le premier formulaire exige le secret actuel, un nouveau mot de passe et sa confirmation, avec CSRF. Réutiliser le secret actuel est refusé. Le changement incrémente la version du mot de passe : les anciennes sessions sont invalides même si leur suppression échoue ensuite. Un nouveau jeton est émis pour la session courante. Le fichier initial est supprimé ; son ancien secret ne permet plus de se connecter.
+[Sommaire de la documentation](README.md)
 
 
-## Compteurs et paliers
+## Comptes et première connexion
 
-Les compteurs sont chiffrés et persistants, avec verrouillage et écriture atomique. Ils portent sur le compte normalisé indépendamment des IP, et sur l’origine indépendamment des noms de compte. Les IP brutes ne sont pas stockées. Les tentatives avec mauvais second facteur comptent aussi ; les confirmations de mot de passe des actions sensibles utilisent la même limitation.
+Bienvenue dans Guardian. Votre mot de passe initial est temporaire. Choisissez un nouveau secret : le panneau et les diagnostics restent fermés jusqu’à ce changement. Le fichier initial sera supprimé après validation.
 
-Avant de calculer un hachage, une réservation atomique empêche les requêtes concurrentes de dépasser le quota. Elle expire après 120 secondes ; un résultat arrivé trop tard ne peut pas créer une session. Une réservation abandonnée compte comme un échec à sa récupération. Les requêtes reçues pendant un blocage sont refusées avec HTTP 429 et Retry-After, sans prolonger la sanction. Un CSRF invalide ne réserve aucun calcul de mot de passe.
+Les comptes Guardian sont indépendants des comptes du site. Le compte initial et les nouveaux comptes doivent changer leur mot de passe avant de continuer. Le rôle sécurité consulte les informations autorisées sans accès au profiler. Un changement de rôle ou de mot de passe invalide les anciennes sessions.
 
-Chaque palier comporte quatre champs :
+Prépare la route privée, la clé, le coffre, les fichiers Symfony et un administrateur s’il en manque. Les comptes existants sont conservés. Refuse la configuration en production. Après une exécution directe, vider le cache et lancer les vérifications.
 
-| Champ | Effet | Limites |
-|---|---|---|
-| Échecs | Nombre de vérifications échouées avant le blocage | 1–100 |
-| Blocage | Durée du refus | 1–10 080 minutes |
-| Fenêtre de comptage | Intervalle à partir du premier échec ; un compteur expiré repart à zéro | 1–1 440 minutes |
-| Récidive | Intervalle après la fin du blocage pendant lequel les nouveaux échecs utilisent le palier suivant | 1–10 080 minutes |
 
-Il faut de 1 à 8 paliers, avec des blocages de durées non décroissantes. Exemple : premier palier 5/10/30/30, deuxième palier 5/120/30/30. Le dernier palier se répète. Hors de la fenêtre de récidive, retour au premier. Une connexion réussie remet à zéro les échecs du compte, mais ne supprime pas l’historique de récidive ni celui de l’origine : un compte valide ne peut pas effacer les traces d’un spray de mots de passe contre d’autres comptes.
+```bash
+php bin/console guardian:access --env=dev
+```
 
-Au-delà de 10 000 entrées actives, les nouvelles identités sont temporairement refusées ; les blocages actifs ne sont pas évincés pour faire de la place. Le stockage reste destiné à un hôte unique. Des contrôles réseau complémentaires restent utiles contre une saturation de ressources. Un verrouillage peut aussi être provoqué par un tiers ; prévoir la récupération CLI `guardian:login:unlock --all` depuis un terminal de confiance.
 
-## Politique des secrets
+| Exigences du mot de passe enregistré | Longueur minimale (caractères Unicode) |
+|---|---|
+| initial-admin-credentials.txt | 0600; random_int; &gt;=32 |
+| password_policy[min_length] | 8–64; 15 |
+| input | Unicode; ≤512 UTF-8 B |
+| Argon2id | PHP + Argon2id → Argon2id |
+| bcrypt | PHP − Argon2id → bcrypt; ≤72 UTF-8 B |
 
-Minimum configurable de 8 à 64 caractères Unicode, 15 par défaut. Majuscules, minuscules, chiffres et symboles peuvent être exigés séparément. Les espaces restent autorisés ; les caractères de contrôle sont refusés. Le plafond d’entrée est de 512 octets. Guardian choisit automatiquement Argon2id pour les nouveaux hachages lorsque le serveur PHP le prend en charge. Si ce support manque, le repli bcrypt refuse tout secret de plus de 72 octets UTF-8, sans troncature silencieuse. Ce n’est pas une recommandation de désactiver Argon2id. Le petit filtre local de secrets évidents n’est pas une liste exhaustive de mots de passe compromis.
+## Politique de mots de passe
 
-La politique s’applique aux nouveaux comptes et changements, y compris `guardian:password:reset`. Elle ne peut pas analyser les anciens secrets hachés. L’administrateur peut demander un renouvellement de tous les comptes actifs ; leurs sessions sont immédiatement révoquées, y compris la sienne. Toute modification exige CSRF, rôle administrateur et confirmation du secret actuel.
+Ces règles s’appliquent aux créations et changements de mot de passe, sur le web comme en CLI. Elles ne révèlent ni ne vérifient les anciens mots de passe.
 
-## Modèle du simulateur
+Valeur initiale : 15 caractères. Utilisez une phrase de passe unique ou un gestionnaire. Les catégories obligatoires ne garantissent pas un mot de passe imprévisible.
 
-L’alphabet simulé est ASCII : 26 minuscules, 26 majuscules, 10 chiffres et 32 symboles hors espace. La politique réelle accepte aussi Unicode et les espaces ; le modèle ne couvre donc pas tous les secrets possibles du serveur.
+Sur ce serveur, Guardian utilise automatiquement Argon2id pour les nouveaux mots de passe. Conservez sa prise en charge dans PHP. La limite applicative est de 512 octets UTF-8.
 
-Pour une longueur fixe L et un alphabet de taille A, le nombre de secrets conformes aux catégories obligatoires est calculé exactement par inclusion-exclusion, avec BigInt. Les catégories sont disjointes. Une catégorie obligatoire absente de l’alphabet, ou une longueur insuffisante, donne zéro combinaison. À alphabet fixe, ajouter une contrainte de composition réduit cet ensemble ; agrandir l’alphabet est une autre opération.
+Ce serveur PHP ne propose pas Argon2id. Guardian utilise donc bcrypt et refuse les mots de passe dépassant 72 octets UTF-8. Demandez à votre administrateur système d’activer la prise en charge d’Argon2id dans PHP.
 
-Le modèle suppose un secret uniforme dans cet ensemble et un ordre de recherche sans remise. Le rang moyen est (N+1)/2. Pour les blocages, il calcule l’espérance du délai sur tous les rangs, avec les probabilités de franchir chaque seuil et une somme arithmétique pour le dernier palier répété. Ce calcul est comparé par test à l’énumération explicite des rangs de petits ensembles. Si le débit supposé ne respecte pas les fenêtres de comptage ou de récidive, cette estimation est désactivée plutôt que de présenter un temps trompeur.
+Cette option révoque immédiatement les sessions existantes, y compris la vôtre. Les comptes devront changer leur mot de passe avant de configurer Guardian ou d’ouvrir les diagnostics.
 
-Le mode hors ligne divise le rang moyen par le débit de hachages saisi, puis multiplie les heures par le prix matériel supposé. Le débit initial de 10 000 hachages/s et le prix de 2 €/h sont illustratifs : ils ne décrivent aucun GPU mesuré. `guardian:password:benchmark` mesure seulement un processus CPU local sur un secret synthétique avec le hachage réellement disponible. Il ne prédit pas la puissance d’un attaquant.
+Change le mot de passe du compte username, demandé en saisie masquée selon la politique active, puis révoque toutes ses sessions et journalise l’action. Le compte doit exister. Aucun mot de passe ne se passe en argument.
 
-Le laboratoire n’accepte pas de vrai mot de passe et n’envoie aucun essai. Il ne modélise ni dictionnaires, habitudes humaines, réutilisations, fuites, phishing, ni attaques ciblées. Il n’attribue pas de garantie de robustesse aux secrets choisis par une personne. Les blocages en ligne n’agissent plus sur des hachages volés.
+## Blocages progressifs
 
-Références : https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html et https://symfony.com/doc/current/setup.html.
+Chaque palier définit un nombre d’échecs, une période de comptage, une durée de blocage et une période de récidive. Par défaut : 10 échecs entraînent 10 minutes de blocage. Une récidive peut déclencher le palier suivant. Les contrôles portent sur le compte et l’origine réseau, y compris pour les confirmations administrateur.
 
-Les nombres du simulateur utilisent une écriture complète avec groupement localisé des chiffres, sans exposant E. Les durées et coûts sont arrondis à quatre chiffres significatifs.
+Les compteurs chiffrés sont indépendants par compte normalisé et origine ; les IP brutes ne sont pas conservées. Une réservation atomique précède le hachage et expire après 120 secondes. Une réservation abandonnée devient un échec, un résultat tardif ne crée aucune session. Un CSRF invalide ne réserve rien. Une connexion réussie efface les échecs du compte mais conserve l’historique de récidive et de l’origine. À 10000 entrées actives, les nouvelles identités sont refusées plutôt que d’évincer les blocages.
+
+Les paliers se lisent dans l’ordre. Après un blocage, de nouveaux échecs dans la fenêtre de récidive déclenchent le palier suivant. Hors de cette fenêtre, retour au premier palier. Le dernier palier se répète. Les requêtes bloquées ne prolongent pas le délai. Maximum 8 paliers. Récupération locale : guardian:login:unlock --all.
+
+| Palier | Exigences du mot de passe enregistré |
+|---|---|
+| Échecs avant blocage | 1–100 |
+| Blocage (minutes) | 1–10080 |
+| Fenêtre de comptage (minutes) | 1–1440 |
+| Récidive après déblocage (minutes) | 1–10080 |
+| Palier | 1–8; block[n+1] ≥ block[n] |
+| Valeur initiale | 10 / 10 / 30 / 30 |
+| 5 → 10 min; 5 → 2 h | 5 / 10 / 30 / 30 → 5 / 120 / 30 / 30 |
+| HTTP | 429; Retry-After |
+
+## Laboratoire de coût d’une recherche exhaustive
+
+Comparez des secrets aléatoires uniformes de longueur fixe, sans saisir de vrai mot de passe. Les débits et le prix du matériel sont des hypothèses modifiables. Aucun essai de connexion n’est envoyé.
+
+Le calcul utilise des catégories ASCII disjointes et BigInt. L’inclusion-exclusion donne le nombre exact de secrets conformes ; une catégorie absente ou une longueur insuffisante donne zéro. Le rang moyen est (N+1)/2 pour un ordre sans remise. L’espérance des blocages tient compte des seuils et du dernier palier répété. Si le débit ne respecte pas les fenêtres, l’estimation est désactivée. Le prix hors ligne est le temps en heures multiplié par le coût horaire supposé.
+
+À alphabet fixe, imposer une catégorie réduit le nombre de secrets conformes. Agrandir l’alphabet est une autre opération. Les temps avec blocages supposent des essais continus assez rapides pour respecter les fenêtres configurées.
+
+Ce modèle n’est pas une mesure de la solidité d’un mot de passe humain. Il ignore dictionnaires, réutilisations, fuites et stratégies ciblées. Le blocage web ne protège pas des hachages volés. Le débit hors ligne initial est illustratif, pas un benchmark. Mesure CPU locale : guardian:password:benchmark.
+
+Les grands nombres sont écrits en entier, avec des séparateurs de groupes et sans notation E. Les durées et coûts sont arrondis. Pour comparer, utilisez la même ligne et les mêmes hypothèses.
+
+| Alphabet disponible pour la simulation | Secrets conformes possibles |
+|---|---|
+| Minuscules ASCII | 26 |
+| Majuscules ASCII | 26 |
+| Chiffres ASCII | 10 |
+| Symboles ASCII hors espace | 32 |
+| Débit en ligne supposé (essais/s) | 1 / s |
+| Débit hors ligne supposé (hachages/s) | 10000 / s |
+| Coût matériel supposé (€/heure) | 2 € / h |
+
+```bash
+php bin/console guardian:password:benchmark --iterations=3 --env=dev
+```
+
+## Récupération et vérifications
+
+Sauvegarder le coffre avec sa clé et tester la restauration. Aucun mécanisme ne régénère automatiquement une clé perdue. Après retrait, vérifier le profiler uniquement en environnement privé. En production : APP_DEBUG=0, WebProfilerBundle et collecte désactivés. Une chaîne d’audit locale ne prouve pas l’intégrité d’un hôte compromis.
+
+Réinitialise les compteurs du compte username. --ip ADRESSE efface aussi le compteur de cette origine IPv4/IPv6 ; sans cela, un blocage réseau peut subsister. --all efface tous les compteurs. Ne change ni comptes, ni mots de passe, ni sessions ; action journalisée.
+
+[Référence des commandes](commands.md)

@@ -42,7 +42,7 @@ Zum Löschen von Konten und Einstellungen den ersten Befehl durch den folgenden 
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Befehlsreferenz
 
 Die Hilfe beschreibt die Befehle. Der Zugriffsbefehl findet die Verwaltung; die Diagnose prüft die Konfiguration. Vertrauenswürdiger lokaler Zugriff ist erforderlich.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Befehlsreferenz](../translations/de_DE/commands.md) · [Dokumentationsübersicht](../translations/de_DE/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

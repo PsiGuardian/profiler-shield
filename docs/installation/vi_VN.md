@@ -42,7 +42,7 @@ php bin/console cache:clear --env=dev
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Tham chiếu lệnh
 
 Trợ giúp mô tả các lệnh. Lệnh truy cập tìm bảng điều khiển; chẩn đoán kiểm tra cấu hình. Cần quyền truy cập cục bộ đáng tin cậy.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Tham chiếu lệnh](../translations/vi_VN/commands.md) · [Mục lục tài liệu](../translations/vi_VN/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

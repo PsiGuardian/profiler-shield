@@ -42,7 +42,7 @@ Ak chcete vymazať aj účty a nastavenia, nahraďte prvý príkaz nasledujúcim
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Prehľad príkazov
 
 Pomocník opisuje príkazy. Príkaz prístupu nájde panel; diagnostika overí nastavenie. Vyžaduje sa dôveryhodný miestny prístup.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Prehľad príkazov](../translations/sk_SK/commands.md) · [Obsah dokumentácie](../translations/sk_SK/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

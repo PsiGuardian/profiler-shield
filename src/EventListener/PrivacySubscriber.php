@@ -6,6 +6,8 @@ use OmegaGuardian\ProfilerShield\Security\Policy;
 use OmegaGuardian\ProfilerShield\Security\Sessions;
 use OmegaGuardian\ProfilerShield\Security\DiagnosticAccess;
 use OmegaGuardian\ProfilerShield\Security\PublicErrorRenderer;
+use OmegaGuardian\ProfilerShield\Security\PublicErrorRegistry;
+use OmegaGuardian\ProfilerShield\Security\SafeNativeRenderer;
 use OmegaGuardian\ProfilerShield\Util\Env;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,13 +40,17 @@ final class PrivacySubscriber implements EventSubscriberInterface
     private $policy;
     private $diagnosticAccess;
     private $errorRenderer;
-    public function __construct(Sessions $sessions, Accounts $accounts, Policy $policy, DiagnosticAccess $diagnosticAccess, ?PublicErrorRenderer $errorRenderer = null)
+    private PublicErrorRegistry $publicErrorRegistry;
+    private SafeNativeRenderer $safeNative;
+    public function __construct(Sessions $sessions, Accounts $accounts, Policy $policy, DiagnosticAccess $diagnosticAccess, ?PublicErrorRenderer $errorRenderer = null, ?PublicErrorRegistry $publicErrorRegistry = null)
     {
         $this->sessions = $sessions;
         $this->accounts = $accounts;
         $this->policy = $policy;
         $this->diagnosticAccess = $diagnosticAccess;
         $this->errorRenderer = $errorRenderer;
+        $this->publicErrorRegistry = $publicErrorRegistry ?? new PublicErrorRegistry();
+        $this->safeNative = new SafeNativeRenderer();
     }
 
     public static function getSubscribedEvents(): array
@@ -75,16 +81,23 @@ final class PrivacySubscriber implements EventSubscriberInterface
         $error=$event->getThrowable();
         $status=$error instanceof HttpExceptionInterface ? $error->getStatusCode() : 500;
         if ($status<400 || $status>599) { $status=500; }
-        // Respecter l’API de l’hôte : jamais substituer du HTML à une
-        // représentation JSON/XML attendue. Les erreurs HTTP y restent
-        // gérées par leur propre sérialiseur de production.
-        if ($this->errorRenderer !== null && !PublicErrorRenderer::acceptsHtml($request)) {
-            $response=$this->errorRenderer->json($status);
-            $this->preserveHttpHeaders($response, $error);
-            $event->setResponse($response);
-            return;
+        // Safe Native: an explicitly tagged application mapper may publish
+        // a strictly validated business error. Unknown exceptions always
+        // remain neutral; nothing is copied from Throwable::getMessage().
+        $approved = $this->publicErrorRegistry->resolve($error, $request);
+        $format = $this->safeNative->format($request);
+        if ($format === 'html') {
+            // Keep the established native/generic/custom HTML behavior.
+            $response = $this->publicPage($status);
+        } else {
+            try {
+                $response = $this->safeNative->render($status, $format, $approved);
+            } catch (\Throwable) {
+                // A failing mapper/renderer must never cause a second public
+                // error containing stack details or filesystem information.
+                $response = $this->generic($status);
+            }
         }
-        $response=$this->publicPage($status);
         $this->preserveHttpHeaders($response, $error);
         $event->setResponse($response);
     }

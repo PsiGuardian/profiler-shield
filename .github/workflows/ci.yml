@@ -37,6 +37,12 @@ jobs:
         with:
           node-version: '22'
       - run: node tests/password_model.js
+      - name: Preserve manually maintained and deleted documentation
+        run: python3 tests/documentation_generator.py
+      - name: Documentation sources and generated pages stay synchronized
+        run: |
+          python3 tools/documentation/generate.py
+          git diff --exit-code -- docs README.md INSTALLATION.md SECURITY.md CONTRIBUTING.md CODE_OF_CONDUCT.md CHANGELOG.md examples/README.md
       - run: composer test
       - run: vendor/bin/phpunit -c phpunit.xml.dist
       - run: composer --no-plugins audit --locked

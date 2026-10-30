@@ -1,0 +1,65 @@
+# Sommaire de la documentation
+
+- [Installation et premier accès](installation.md)
+- [Toutes les commandes](commands.md)
+- [Options et réglages](reglages.md)
+- [Authentification et simulateur](authentication.md)
+- [Authentificateur TOTP](enrolement-totp.md)
+- [Pages d’erreur publiques](error-pages.md)
+- [Architecture et frontières de confiance](architecture.md)
+- [Invariants de sécurité](contrat-securite.md)
+- [Désinstallation et données](desinstallation.md)
+- [Traductions et contrôles](localization.md)
+- [Politique de sécurité](security.md)
+- [Contribuer](contributing.md)
+- [Code de conduite](code-of-conduct.md)
+- [Exemples d’interface](examples.md)
+- [Fonctionnalités](features.md)
+
+[README](../README.md) · [SECURITY](../SECURITY.md) · [CHANGELOG](../CHANGELOG.md) · [examples](../examples/README.md)
+
+## Démonstration en ligne
+
+**[Ouvrir la connexion de démonstration](https://demos-kratos.omegaguardian.fr/demo-profiler-shield-populorum)**
+
+
+| Accès | Valeur |
+|---|---|
+| Site de démonstration | [demos-kratos.omegaguardian.fr](https://demos-kratos.omegaguardian.fr/) |
+| Chemin de connexion | `/demo-profiler-shield-populorum` |
+| Identifiant public | `demo` |
+| Mot de passe public | `Populorum-Demo!2026` |
+
+
+Ces identifiants sont volontairement publics et réservés à cette instance fictive de démonstration. Les diagnostics de démo sont accessibles en lecture seule.
+
+## Documentation par langue
+
+- [FR — Français · France](translations/fr_FR/README.md) · [Installation](installation/fr_FR.md)
+- [GB — English · United Kingdom](translations/en_GB/README.md) · [Installation](installation/en_GB.md)
+- [DE — Deutsch · Deutschland](translations/de_DE/README.md) · [Installation](installation/de_DE.md)
+- [ES — Español · España](translations/es_ES/README.md) · [Installation](installation/es_ES.md)
+- [IT — Italiano · Italia](translations/it_IT/README.md) · [Installation](installation/it_IT.md)
+- [PT — Português · Portugal](translations/pt_PT/README.md) · [Installation](installation/pt_PT.md)
+- [NL — Nederlands · Nederland](translations/nl_NL/README.md) · [Installation](installation/nl_NL.md)
+- [PL — Polski · Polska](translations/pl_PL/README.md) · [Installation](installation/pl_PL.md)
+- [RO — Română · România](translations/ro_RO/README.md) · [Installation](installation/ro_RO.md)
+- [CZ — Čeština · Česko](translations/cs_CZ/README.md) · [Installation](installation/cs_CZ.md)
+- [SK — Slovenčina · Slovensko](translations/sk_SK/README.md) · [Installation](installation/sk_SK.md)
+- [HU — Magyar · Magyarország](translations/hu_HU/README.md) · [Installation](installation/hu_HU.md)
+- [GR — Ελληνικά · Ελλάδα](translations/el_GR/README.md) · [Installation](installation/el_GR.md)
+- [HR — Hrvatski · Hrvatska](translations/hr_HR/README.md) · [Installation](installation/hr_HR.md)
+- [RU — Русский · Россия](translations/ru_RU/README.md) · [Installation](installation/ru_RU.md)
+- [TR — Türkçe · Türkiye](translations/tr_TR/README.md) · [Installation](installation/tr_TR.md)
+- [SA — العربية · السعودية](translations/ar_SA/README.md) · [Installation](installation/ar_SA.md)
+- [IN — हिन्दी · भारत](translations/hi_IN/README.md) · [Installation](installation/hi_IN.md)
+- [CN — 简体中文 · 中国](translations/zh_CN/README.md) · [Installation](installation/zh_CN.md)
+- [JP — 日本語 · 日本](translations/ja_JP/README.md) · [Installation](installation/ja_JP.md)
+- [ID — Bahasa Indonesia](translations/id_ID/README.md) · [Installation](installation/id_ID.md)
+- [VN — Tiếng Việt · Việt Nam](translations/vi_VN/README.md) · [Installation](installation/vi_VN.md)
+- [GE — ქართული · საქართველო](translations/ka_GE/README.md) · [Installation](installation/ka_GE.md)
+- [IE — English · Ireland](translations/en_IE/README.md) · [Installation](installation/en_IE.md)
+- [MN — Монгол · Монгол](translations/mn_MN/README.md) · [Installation](installation/mn_MN.md)
+- [MY — Bahasa Melayu · Malaysia](translations/ms_MY/README.md) · [Installation](installation/ms_MY.md)
+- [US — English · United States](translations/en_US/README.md) · [Installation](installation/en_US.md)
+- [CA — English · Canada](translations/en_CA/README.md) · [Installation](installation/en_CA.md)

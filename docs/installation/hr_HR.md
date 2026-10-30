@@ -42,7 +42,7 @@ Za brisanje računa i postavki zamijenite prvu naredbu sljedećom i potvrdite. O
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Pregled naredbi
 
 Pomoć opisuje naredbe. Naredba pristupa pronalazi ploču, a dijagnostika provjerava postavke. Potreban je pouzdan lokalni pristup.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Pregled naredbi](../translations/hr_HR/commands.md) · [Sadržaj dokumentacije](../translations/hr_HR/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

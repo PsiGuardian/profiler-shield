@@ -42,7 +42,7 @@ Untuk menghapus akun dan pengaturan juga, ganti perintah pertama dengan berikut 
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Referensi perintah
 
 Bantuan menjelaskan perintah. Perintah akses menemukan panel; diagnostik memeriksa konfigurasi. Diperlukan akses lokal yang tepercaya.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Referensi perintah](../translations/id_ID/commands.md) · [Daftar isi dokumentasi](../translations/id_ID/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 
