@@ -14,7 +14,6 @@
         "symfony/config": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
         "symfony/http-foundation": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
         "symfony/event-dispatcher": "^5.4 || ^6.4 || ^7.4 || ~8.1.0",
-        "bacon/bacon-qr-code": "^2.0.4",
         "ext-tokenizer": "*"
     },
     "require-dev": {
@@ -49,7 +48,9 @@
         "test:translations": "@php tests/translation_audit.php --strict",
         "release:check": "@php tools/release-gate.php",
         "test:password-model": "node tests/password_model.js",
-        "test:authentication": "@php tests/authentication_security.php"
+        "test:authentication": "@php tests/authentication_security.php",
+        "test:docs": "@php tests/documentation_audit.php",
+        "docs:build": "python3 tools/documentation/generate.py"
     },
     "bin": [
         "bin/guardian"

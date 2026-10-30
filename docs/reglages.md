@@ -1,244 +1,93 @@
-# Réglages ΩGuardian : comment décider sans perdre de temps ?
+# Configuration
 
-Pour chaque option : **effet exact**, **quand l'activer**, **exemple**,
-**conséquence de désactivation** et **impact quotidien**. Les réglages à risque
-sont confirmés par mot de passe administrateur. Les valeurs ci-dessous
-correspondent au cœur livré, sauf lorsqu'une fonction est explicitement
-signalée comme future ou expérimentale.
-
-## Principes non négociables
-
-- Le contrôle d'accès au profiler est obligatoire lorsque Guardian est en place.
-- Une session inconnue, expirée ou révoquée n'autorise jamais un accès.
-- La panne du stockage Guardian refuse l'accès aux diagnostics.
-- Le site principal n'est pas soumis aux horaires de Guardian.
-- Le WebProfiler et la toolbar doivent rester désactivés en production.
-- Les clés, mots de passe et codes d'urgence ne vont jamais dans Git.
-
-## 1. Modes de préconfiguration
-
-| Profil | Utilisateur idéal | Changements | Impact |
-|---|---|---|---|
-| Indépendant | Travail seul, recette privée | MFA facultative ; horaires et JIT désactivés ; session 8 h | Faible |
-| Équipe | Agence / recette partagée | MFA obligatoire une fois les comptes enrôlés ; cookie appareil 7 j | Modéré |
-| Sensible | Environnement soumis à contrôle | MFA, horaires et JIT ; session 4 h ; inactivité 15 min | Élevé |
-
-Les profils sont des points de départ. Ils ne constituent pas une garantie
-contre les failles du framework Symfony ou de l'application.
-
-## 2. `stealth`
-
-**Fonction :** refuser les routes de diagnostic avec 404 générique plutôt
-qu'un 403 explicite. Le chemin de connexion Guardian est défini séparément.
-
-**Activer :** installation de recette accessible à Internet.
-**Exemple :** requête `GET /_profiler/` anonyme → 404 générique.
-**Désactiver :** obtenir un refus 403, utile dans un réseau interne où l'on
-privilégie la clarté des statuts HTTP.
-**Impact développeur :** nul lorsque la session est autorisée.
-**Attention :** cela ne rend pas une installation invisible ou invulnérable.
-
-## 3. `GUARDIAN_LOGIN_PATH`
-
-**Fonction :** route d'entrée privée, aléatoire et personnalisable. Aucune
-route publique par défaut n'est créée.
-
-**Activer :** variable nécessaire à l'exposition du portail Guardian.
-**Exemple :** `/internal/` suivi d'au moins 48 caractères hexadécimaux générés
-avec `random_bytes()`, différente pour chaque installation.
-**Désactiver :** portail inaccessible, même pour un administrateur ; les routes
-protégées restent fermées.
-**Impact développeur :** ajouter la route à son gestionnaire de secrets.
-**Attention :** rotation implique rebuild du cache route et nouveau favori.
-
-## 4. MFA `mfa`
-
-**Fonction :** imposer à tous les comptes une application TOTP lors de la
-connexion. Chaque code consommé est invalidé pour un nouveau login.
-
-**Activer :** équipe, recette exposée ou comptes administrateurs sensibles.
-**Exemple :** un prestataire doit saisir mot de passe puis un code à 6 chiffres.
-**Désactiver :** connexion par mot de passe seul, à réserver aux environnements
-isolés lorsque le risque le permet.
-**Impact développeur :** une étape supplémentaire lors des connexions.
-**Attention :** chaque compte doit être enrôlé avant la bascule. Le système
-ne propose pas encore de passkeys/WebAuthn. La récupération MFA se fait en CLI.
-
-## 5. `idle_minutes` et `absolute_hours`
-
-**Fonction :** révoquer une session après inactivité ou une durée absolue.
-**Activer :** ces deux seuils restent obligatoires et configurables.
-**Exemple :** 60 min d'inactivité et 8 h absolues. Après pause déjeuner de plus
-d'une heure, le développeur se reconnecte ; les droits ne restent pas ouverts.
-**Désactiver :** pas proposé ; seuils augmentables selon l'environnement.
-**Impact développeur :** faibles seuils = reconnexions plus fréquentes.
-**Attention :** une durée de cookie ne suffit pas à sécuriser une session.
-
-## 6. `remember_days`
-
-**Fonction :** conserver un marqueur de reconnaissance non authentifiant.
-**Activer :** postes personnels autorisés, jusqu'à la durée de reconnaissance
-configurée (14 jours par défaut).
-**Exemple :** un navigateur déjà utilisé est identifiable comme appareil
-reconnu, mais son utilisateur doit encore s'authentifier si sa session a expiré.
-**Désactiver :** ne pas cocher « reconnaître cet appareil » sur le formulaire.
-**Impact développeur :** actuellement aucun avantage de reconnexion automatique.
-**Attention :** le marqueur ne prolonge pas la session. Réauthentification
-passkey simplifiée prévue pour une version ultérieure.
-
-## 7. `schedule_enabled`, `weekdays`, `start`, `end`, `timezone`
-
-**Fonction :** restreindre les diagnostics à des heures définies dans le
-fuseau IANA (ex. `Europe/Paris`).
-**Activer :** équipes avec horaires réguliers.
-**Exemple :** lundi-vendredi, 09h00–18h00. Un vendredi à 18h01, tout profil
-reste fermé même si le cookie n'a pas expiré.
-**Désactiver :** indépendants, astreintes, équipes internationales.
-**Impact développeur :** aucun pendant les horaires ; blocage hors horaires.
-**Attention :** une seule plage par jour, commune à l'installation, est
-implémentée. Les plages traversant minuit et calendriers multi-équipes sont à
-implémenter. La validation rejette début >= fin.
-
-## 8. `portal_closed_outside_hours`
-
-**Fonction :** retourner 404 également sur l'URL de connexion Guardian en dehors
-de la plage horaire (si TimeLock activé).
-**Activer :** entreprise désirant une fermeture distante stricte.
-**Exemple :** aucun formulaire Guardian le dimanche ; site métier inchangé.
-**Désactiver :** développeur souhaitant consulter son dashboard ou demander une
-dérogation en dehors des horaires.
-**Impact développeur :** significatif pour les astreintes.
-**Attention :** l'urgence distante est INCOMPATIBLE ; seule la récupération
-locale CLI est disponible. La validation interdit la combinaison.
-
-## 9. `jit_enabled`, `jit_minutes`
-
-**Fonction :** l'identité peut rester connectée, mais le droit de profiler est
-accordé pendant un créneau court activé par l'utilisateur.
-**Activer :** accès ponctuel en environnement sensible.
-**Exemple :** 30 minutes de diagnostic pour analyser une erreur de paiement.
-**Désactiver :** développer avec un profiler accessible en continu durant sa
-session normale autorisée.
-**Impact développeur :** un clic pour ouvrir le créneau.
-**Attention :** la collecte effective dépend de la configuration du profiler Symfony. Le JIT contrôle la consultation des routes.
-
-## 10. `ip_allowlist`
-
-**Fonction :** limiter l'interface et le profiler à des adresses IPv4/IPv6 ou
-sous-réseaux CIDR déclarés.
-**Activer :** agence connectée via VPN, poste de bastion connu.
-**Exemple :** `192.0.2.0/24, 2001:db8::/32` (préfixes réservés à la documentation).
-**Désactiver :** déplacements fréquents, réseau mobile sans VPN.
-**Impact développeur :** aucun depuis un réseau autorisé ; blocage ailleurs.
-**Attention :** indiquer les `trusted_proxies` correctement dans Symfony.
-Récupération depuis le serveur : `guardian:policy:reset`.
-
-## 11. Anti-brute-force
-
-**Fonction :** maintenir des compteurs indépendants par compte et par origine réseau, avec paliers configurables
-haché, limitant les demandes de connexion après huit échecs rapprochés.
-**Activer :** intégré au socle de connexion.
-**Exemple :** des essais de mots de passe incorrects sont temporairement
-bloqués, puis le compteur expire.
-**Désactiver :** aucune option de désactivation totale dans le bundle livré.
-**Impact développeur :** nul en cas d'identifiants corrects.
-**Attention :** la protection DDoS/distribuée doit aussi être mise en place
-au serveur web ou reverse proxy.
-
-## 12. `audit_level` et `audit_retention_days`
-
-**Fonction :** journaliser les actions Guardian sans URL secrète ni cookie.
-**Activer :** recommandé même en développement indépendant.
-**Exemple :** une dérogation d'urgence garde identifiant, heure UTC et motif.
-**Niveaux :** `minimal` exclut les connexions et ouvertures JIT ; `standard`
-conserve les principaux événements ; `advanced` prépare une politique élargie.
-**Désactiver :** l'audit critique reste exigé (pas d'interrupteur « off »).
-**Impact développeur :** nul sur les pages métier ; écritures lors d'actions Guardian.
-**Attention :** stockage local mono-hôte, chaînage détectant certaines
-modifications mais non résistant à un administrateur système malveillant.
-Le niveau avancé ne propose pas encore un export SIEM automatique.
-
-## 13. `alert_email`
-
-**Fonction :** destinataire des notifications de sécurité ; l'envoi est
-traité par `guardian:alerts:flush` depuis cron.
-**Activer :** organisation avec responsable sécurité.
-**Exemple :** un accès d'urgence est ajouté à la file, puis notifié par mail.
-**Désactiver :** laisser l'adresse vide ; les alertes resteront sur disque.
-**Impact développeur :** aucune latence mail sur les requêtes métier.
-**Attention :** `mail()` est minimal : configurer l'envoi et un cron, tester
-livraison ; transport SMTP dédié prévu plus tard.
-
-## 14. `emergency_enabled`
-
-**Fonction :** donner 30 minutes d'accès exceptionnel à un utilisateur déjà
-connecté, après vérification du mot de passe et d'un code à usage unique.
-**Activer :** agences ayant des astreintes et un responsable sécurité.
-**Exemple :** intervention urgente un samedi en dehors du créneau normal.
-**Désactiver :** équipe sans besoin d'urgence distante ; la commande shell de
-récupération reste disponible.
-**Impact développeur :** uniquement pendant un incident.
-**Attention :** exécuter `guardian:emergency utilisateur` côté serveur pour
-générer cinq codes. Un code n'est affiché qu'une fois, doit être protégé hors
-site et ne remplace pas l'authentification.
-
-## 15. Commande `guardian:lockdown on/off`
-
-**Fonction :** fermer immédiatement les diagnostics et invalider les sessions.
-**Activer :** suspicion de compromission ou intervention sécurité.
-**Exemple :** découverte d'un token révélé, mise en lockdown pendant analyse.
-**Désactiver :** `guardian:lockdown off` uniquement depuis shell ; les développeurs
-devront de nouveau se connecter.
-**Impact développeur :** aucun effet sur les pages métier, blocage du profiler.
-**Attention :** ne remplace pas un retrait de WebProfilerBundle en production.
-
-## 16. `GUARDIAN_COLLECTION_BRIDGE`
-
-**Fonction :** contrôler la collecte Symfony au niveau de la requête authentifiée,
-avec fermeture par défaut.
-**Activer :** seulement après tests end-to-end réussis sur **votre version**
-de Symfony, avec `framework.profiler.collect: false` et toolbar désactivée.
-**Exemple :** une requête du navigateur d'un développeur autorisé est collectée ;
-celle d'un visiteur sans cookie ne l'est pas.
-**Désactiver :** valeur 0 (par défaut, sûre et restrictive) ; aucun nouveau profil.
-**Impact développeur :** frais de collecte et de vérification de session quand
-actif ; mesurer cet impact sur l’infrastructure utilisée.
-
-## 17. Security Doctor
-
-**Fonction :** contrôler l'état du stockage, la syntaxe du chemin et des
-paramètres, ainsi que les préconditions d'intégration à vérifier manuellement.
-**Activer :** commande `guardian:doctor` au déploiement et après mise à jour.
-**Exemple :** l'administrateur est averti si la clé de chiffrement TOTP manque.
-**Désactiver :** ne pas le planifier, mais toujours l'exécuter avant publication.
-**Impact développeur :** nul hors déploiement.
-**Attention :** Doctor local ne confirme ni l'exposition externe ni la
-configuration réelle de la toolbar. Ces contrôles nécessitent des tests HTTP.
-
-## Scénarios de référence
-
-**Indépendant sur poste local :** profil solo, TimeLock désactivé, MFA au choix,
-bridge de collecte activé uniquement après validation. Les contraintes sont
-minimales.
-
-**Agence de dix développeurs en recette :** comptes individuels, MFA enrôlée,
-réseau VPN, sessions 8 h, audit standard, créneaux JIT selon les risques. La
-fermeture horaire reste facultative si les horaires sont irréguliers.
-
-**Prestataire externe pour deux jours :** créer un compte personnel, activer MFA,
-limiter l'accès par IP/VPN et le désactiver après mission. Désactiver le compte à la fin de la mission.
-
-**Site en production :** `APP_DEBUG=0`, pas de WebProfilerBundle, aucune collecte.
-Ne pas utiliser Guardian pour justifier l'exposition du profiler de production.
+[Sommaire de la documentation](README.md)
 
 
+## Protections complémentaires
 
-## Connexions et mots de passe
+Chaque contrôle est regroupé avec ses réglages. Les options inactives sont grisées et conservées pour une prochaine activation.
 
-Les paliers de limitation et les exigences du mot de passe sont décrits dans [authentification](authentication.md). La création de compte et le renouvellement présentent les règles enregistrées sous forme de badges. Enregistrer la politique avant de créer un compte pour appliquer ses nouvelles exigences.
+Guardian contrôle le profiler et la barre de débogage. Un compte administrateur ou développeur autorisé est nécessaire. MFA, horaires, JIT, restrictions réseau et verrouillage peuvent encore refuser l’accès. Le mode discret masque les points d’entrée ; il ne remplace pas ces contrôles.
 
-## Consultation des listes
 
-Le journal filtre l’ensemble des événements conservés avant de les paginer par 50. Les filtres type et compte se combinent ; les liens précédent/suivant conservent ces filtres. Une zone à hauteur limitée permet de défiler dans chaque page. Les filtres de comptes par nom et rôle agissent localement sur les comptes affichés. Sans JavaScript, les comptes restent tous consultables et les filtres du journal restent opérationnels.
+```text
+POST ∧ CSRF ∧ role=admin ∧ password
+```
 
-Le sélecteur de langue s’ouvre explicitement, permet une recherche locale parmi les 28 choix et n’applique rien avant le bouton de validation. La liste reste défilable au clavier. Le guide intégré couvre les protections et limites de l’interface courante.
+
+| Profil | Configuration |
+|---|---|
+| Indépendant · flexible | solo: mfa=false; schedule=false; jit=false; idle=60 min; absolute=8 h; remember=14 d |
+| Équipe · renforcé | team: mfa=true; schedule=false; jit=false; idle=45 min; absolute=8 h; remember=7 d |
+| Sensible · contrôlé | strict: mfa=true; schedule=true; jit=true; idle=15 min; absolute=4 h; remember=1 d |
+
+| Paramètre | Configuration | Valeur initiale |
+|---|---|---|
+| `stealth` | Retourne 404 au lieu de 403 sur les routes de diagnostic non autorisées. | `true` |
+| `mfa` | Tous les comptes doivent disposer d’un TOTP enrôlé avant l’activation. | `false` |
+| `idle_minutes` | Minutes sans activité autorisée avant expiration. | `60` |
+| `absolute_hours` | Heures, quelle que soit l’activité. | `8` |
+| `remember_days` | Jours. Ne remplace ni l’authentification ni les horaires. | `14` |
+| `schedule_enabled` | Décidez des moments où les diagnostics sont accessibles. Les pages métier restent disponibles. | `false` |
+| `weekdays` | Cliquez sur les jours pour autoriser ou exclure les accès. | `1,2,3,4,5` |
+| `start` | Ouverture | `09:00` |
+| `end` | Fermeture | `18:00` |
+| `timezone` | Détecté depuis le processus PHP qui sert cette page. PHP CLI, PHP-FPM et le système peuvent utiliser des fuseaux différents. Vérifiez la configuration réelle avant de valider. | `OS / PHP CLI` |
+| `portal_closed_outside_hours` | La route privée renvoie 404 hors horaires. Récupération locale uniquement. | `false` |
+| `jit_enabled` | N’ouvre le profiler que pour une période de diagnostic demandée. | `false` |
+| `jit_minutes` | En minutes, utilisée uniquement lorsque l’option est activée. | `30` |
+| `ip_allowlist` | Attention : une erreur peut bloquer votre accès. Récupération locale : guardian:policy:reset. | `∅` |
+| `audit_level` | Niveau de détail et durée de conservation du journal local. | `standard` |
+| `audit_retention_days` | Nombre de jours, avant purge. | `30` |
+| `alert_email` | Destinataire des alertes d’urgence ; ne doit pas dépendre de la disponibilité du site. | `∅` |
+| `emergency_enabled` | Autorise une fenêtre exceptionnelle de 30 minutes, avec code unique et audit. | `false` |
+| `login_rules` | Par défaut : 10 échecs, puis 10 minutes de blocage. Les compteurs se cumulent par compte et par origine réseau, y compris lors des confirmations de mot de passe. | `10 / 10 / 30 / 30` |
+| `password_policy` | Ces règles s’appliquent aux créations et changements de mot de passe, sur le web comme en CLI. Elles ne révèlent ni ne vérifient les anciens mots de passe. | `min_length=15` |
+| `error_mode` | Pages du site : conserve les réponses 404 du site ; pour une exception, utilise son modèle 404 si possible, sinon une page neutre. Neutre : message standard. Personnalisé : utilise votre texte. | `native` |
+| `error_reference` | La référence concerne les pages neutres générées par Guardian : aléatoire produit un nouveau code, pas un message aléatoire. Elle ne constitue pas un identifiant de suivi dans les journaux. | `none` |
+| `error_reference_text` | Disponible uniquement avec une référence statique personnalisée. | `∅` |
+| `error_custom_text` | Disponible uniquement en mode « Message neutre personnalisé ». Le texte est conservé lors d’un changement de mode. | `∅ → custom` |
+
+Activez le planning, sélectionnez les jours, l’heure de début incluse et l’heure de fin exclue. Le fuseau enregistré détermine les heures locales. Aucune plage traversant minuit n’est acceptée. Masquer aussi le portail hors horaires empêche l’urgence à distance ; prévoyez un accès local aux commandes de récupération.
+
+La durée d’inactivité, la durée absolue et la mémorisation de l’appareil ont des fonctions distinctes. Mémoriser un appareil ne contourne ni les horaires ni le JIT. La révocation coupe les sessions concernées côté serveur. Utilisez les comptes individuels pour attribuer les actions dans le journal.
+
+Le JIT exige l’activation d’une fenêtre temporaire depuis une session autorisée. L’urgence, si elle est activée, requiert le mot de passe, un code à usage unique et un motif. Elle ne contourne pas le verrouillage général. Les commandes locales restent nécessaires si le portail est inaccessible.
+
+La liste IP accepte des adresses IPv4, IPv6 et des réseaux CIDR. Vérifiez la configuration des proxys de confiance Symfony avant son activation. Utilisez HTTPS pour les cookies sécurisés. Guardian ne corrige pas une exposition du serveur web ou de la base de données.
+
+Le niveau et la durée de conservation déterminent les événements disponibles, avec une limite de 5000 entrées. Filtrez par type et compte avant de changer de page. Les alertes sont mises en file ; configurez le transport et leur envoi. Une chaîne d’empreintes locale ne garantit pas l’intégrité sur un hôte compromis.
+
+Réglez la longueur minimale et les catégories obligatoires dans Connexions et mots de passe. Les badges de création de compte décrivent la politique enregistrée. Les changements s’appliquent aux nouveaux mots de passe ; cochez le renouvellement obligatoire pour les comptes existants. Guardian choisit Argon2id quand PHP le propose, sinon bcrypt.
+
+Filtrez tous les événements conservés par type et par compte. Les plus récents apparaissent en premier, par pages de 50. Le défilement ne charge pas les pages suivantes.
+
+## Environnement
+
+
+```dotenv
+GUARDIAN_LOGIN_PATH=/internal/<random-48-hex>
+GUARDIAN_ENCRYPTION_KEY=<64-hex>
+GUARDIAN_STORAGE_DIR=<private-directory>
+GUARDIAN_COLLECTION_BRIDGE=0
+GUARDIAN_DEBUG_ERRORS_FOR_AUTHENTICATED=0
+GUARDIAN_SHOW_PHP_VERSION=0
+```
+
+
+Le proxy assure TLS, normalisation et protection volumétrique. La passerelle contrôle les diagnostics avant le routeur ; les routes métier ne lisent pas les comptes ou sessions. L’identité Guardian est indépendante des comptes Symfony. Le coffre privé et sa clé doivent être sauvegardés ensemble, hors du répertoire public. Une compromission PHP ou de l’hôte peut exposer les deux. Le stockage est mono-hôte. Une erreur de démarrage PHP, de cache ou de proxy peut affecter toute l’application.
+
+Sauvegarder le coffre avec sa clé et tester la restauration. Aucun mécanisme ne régénère automatiquement une clé perdue. Après retrait, vérifier le profiler uniquement en environnement privé. En production : APP_DEBUG=0, WebProfilerBundle et collecte désactivés. Une chaîne d’audit locale ne prouve pas l’intégrité d’un hôte compromis.
+
+## Récupération et vérifications
+
+Vide la liste IP et désactive le planning, le JIT et l’urgence distante. Ne retire pas l’authentification, la MFA, le verrouillage global ni les blocages de connexion. Reconfigurer les restrictions voulues dans le panneau après récupération.
+
+on ferme les diagnostics et supprime toutes les sessions ; le site métier reste disponible. off lève uniquement le verrouillage global : les comptes doivent se reconnecter et les autres politiques restent applicables.
+
+
+```bash
+php bin/console guardian:policy:reset --env=dev
+php bin/console guardian:lockdown on --env=dev
+php bin/console guardian:doctor --env=dev
+```

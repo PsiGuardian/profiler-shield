@@ -42,7 +42,7 @@ php bin/console cache:clear --env=dev
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. ბრძანებების ცნობარი
 
 დახმარება აღწერს ბრძანებებს. წვდომის ბრძანება პოულობს პანელს; დიაგნოსტიკა ამოწმებს პარამეტრებს. საჭიროა სანდო ადგილობრივი წვდომა.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[ბრძანებების ცნობარი](../translations/ka_GE/commands.md) · [დოკუმენტაციის სარჩევი](../translations/ka_GE/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

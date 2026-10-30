@@ -42,7 +42,7 @@ Para eliminar também contas e definições, substituir o primeiro comando pelo 
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Referência dos comandos
 
 A ajuda descreve os comandos. O comando de acesso encontra o painel; o diagnóstico verifica a configuração. É necessário acesso local de confiança.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Referência dos comandos](../translations/pt_PT/commands.md) · [Índice da documentação](../translations/pt_PT/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

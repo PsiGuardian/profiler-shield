@@ -42,7 +42,7 @@ To delete accounts and settings as well, replace the first command with the foll
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Command reference
 
 Help describes the commands. The access command locates the panel; diagnostics check configuration. These operations require trusted local access.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Command reference](../translations/en_IE/commands.md) · [Documentation contents](../translations/en_IE/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

@@ -42,7 +42,7 @@ php bin/console cache:clear --env=dev
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Тушаалуудын лавлах
 
 Тусламж нь тушаалуудыг тайлбарлана. Хандалтын тушаал самбарыг олно; оношилгоо тохиргоог шалгана. Итгэмжлэгдсэн дотоод хандалт шаардлагатай.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Тушаалуудын лавлах](../translations/mn_MN/commands.md) · [Баримт бичгийн агуулга](../translations/mn_MN/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

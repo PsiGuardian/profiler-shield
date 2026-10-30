@@ -42,7 +42,7 @@ Aby usunąć także konta i ustawienia, zastąp pierwsze polecenie poniższym i 
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Spis poleceń
 
 Pomoc opisuje polecenia. Polecenie dostępu odnajduje panel, a diagnostyka sprawdza konfigurację. Wymagany jest zaufany dostęp lokalny.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Spis poleceń](../translations/pl_PL/commands.md) · [Spis dokumentacji](../translations/pl_PL/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

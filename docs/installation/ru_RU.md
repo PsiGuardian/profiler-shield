@@ -42,7 +42,7 @@ php bin/console cache:clear --env=dev
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Справочник команд
 
 Справка описывает команды. Команда доступа находит панель, диагностика проверяет настройки. Необходим доверенный локальный доступ.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Справочник команд](../translations/ru_RU/commands.md) · [Содержание документации](../translations/ru_RU/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 

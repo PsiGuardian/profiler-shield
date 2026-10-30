@@ -42,7 +42,7 @@ Untuk memadam akaun dan tetapan juga, gantikan arahan pertama dengan yang beriku
 php bin/console guardian:uninstall --purge --env=dev
 ```
 
-## 5. CLI
+## 5. Rujukan arahan
 
 Bantuan menerangkan arahan. Arahan akses mencari panel; diagnostik menyemak konfigurasi. Akses setempat yang dipercayai diperlukan.
 
@@ -51,6 +51,16 @@ php vendor/bin/guardian --help
 php bin/console guardian:doctor --env=dev
 php bin/console guardian:access --env=dev
 ```
+<!-- guardian:command-reference -->
+
+[Rujukan arahan](../translations/ms_MY/commands.md) · [Kandungan dokumentasi](../translations/ms_MY/README.md)
+
+```bash
+php bin/console list guardian --env=dev
+php bin/console help guardian:setup --env=dev
+```
+
+<!-- /guardian:command-reference -->
 
 ## Private Packagist
 
