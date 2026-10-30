@@ -5,17 +5,17 @@
 
 ## İki faktörlü kimlik doğrulama
 
-Guardian hesabınızı harici QR hizmetleri olmadan geçici kodlarla koruyun.
+Her kişi kendi kayıtlarını yapar TOTP gizli ve bir kod doğrulamaktadır.
 
-Her kişi kendi kayıtlarını yapar TOTP gizli ve bir kod doğrulamaktadır. talep MFA bloklar profil erişimi kayıtlı olmayan hesaplar için. QR Kodu portal için yerel kalır. tüm ekip için bu koruma gerektirmeden önce idari iyileşmeyi planlayın.
+Her kişi kendi kayıtlarını yapar TOTP gizli ve bir kod doğrulamaktadır. talep MFA bloklar profil erişimi kayıtlı olmayan hesaplar için. tüm ekip için bu koruma gerektirmeden önce idari iyileşmeyi planlayın. Manuel kurulumu seçip gösterilen anahtarı girin. SHA-1, altı rakam ve 30 saniyelik süre kullanın.
 
 ## 1. Kimliğinizi doğrulayın
 
 Guardian'a girişte kullandığınız parolayı girin. Bu kurulum için yalnızca bir kez istenir.
 
-## 2. Bu QR kodu kimlik doğrulayıcınızla tarayın
+## 2. Anahtarı doğrulama uygulamasına girin
 
-Guardian QR kodunu yerel olarak oluşturur; dış hizmetlere istek göndermez.
+Manuel kurulumu seçip gösterilen anahtarı girin. SHA-1, altı rakam ve 30 saniyelik süre kullanın.
 
 ## 3. Altı haneli kodu doğrulayın
 
@@ -23,11 +23,11 @@ Uygulamadaki kodu girin. İkinci parola gerekmez.
 
 ## Gizlilik: web sitesi URL'sini girmeyin
 
-Uygulama ad veya site isterse yalnızca “ΩGuardian” ya da tarafsız bir ad girin. Symfony örneğinizin URL'sini yazmayın. Çevrimiçi QR oluşturucularını kullanmayın: gizli anahtarınızı alırlar.
+Uygulama ad veya site isterse yalnızca “ΩGuardian” ya da tarafsız bir ad girin. Symfony örneğinizin URL'sini yazmayın.
 
 Gizli tutun: TOTP kodlarınız bununla oluşturulabilir. Paylaşmayın, ekran görüntüsü almayın.
 
-Geçici sır 10 dakika veya 5 yanlış koddan sonra biter; yeniden başlayın. Yanlış kodda form korunur, parola tekrar istenmez. Onay sayacı tekrar kullanımını önlemek için tüketilir. SVG QR, bacon/bacon-qr-code ve ext-iconv kullanır; GD, XMLWriter veya ağ gerekmez. Elle giriş sürer. otpauth URI tarafsız sağlayıcı ve hesabı içerir, site alan adını içermez. Sırrı ve özel URL’yi paylaşmayın.
+Geçici sır 10 dakika veya 5 yanlış koddan sonra biter; yeniden başlayın. Yanlış kodda form korunur, parola tekrar istenmez. Onay sayacı tekrar kullanımını önlemek için tüketilir.
 
 ## İyileşme ve doğrulama
 

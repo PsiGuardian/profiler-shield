@@ -5,17 +5,17 @@
 
 ## Autenticação de dois fatores
 
-Proteja a sua conta Guardian com códigos temporários, sem serviços QR externos.
+Cada indivíduo registra seu próprio TOTP secreto e confirma um código.
 
-Cada indivíduo registra seu próprio TOTP secreto e confirma um código. requerimento MFA blocos de acesso aos perfis para contas não registradas. QR Planos de recuperação administrativa antes de exigir essa proteção para toda a equipe.
+Cada indivíduo registra seu próprio TOTP secreto e confirma um código. requerimento MFA blocos de acesso aos perfis para contas não registradas. Escolha a configuração manual e introduza a chave apresentada. Utilize SHA-1, seis dígitos e um período de 30 segundos.
 
 ## 1. Confirme a sua identidade
 
 Introduza a palavra-passe que utiliza para iniciar sessão no Guardian. Só será pedida uma vez.
 
-## 2. Leia este QR na aplicação autenticadora
+## 2. Introduza a chave na aplicação
 
-Guardian gera o QR localmente, sem contactar serviços externos.
+Escolha a configuração manual e introduza a chave apresentada. Utilize SHA-1, seis dígitos e um período de 30 segundos.
 
 ## 3. Confirme um código de seis dígitos
 
@@ -23,11 +23,11 @@ Introduza o código apresentado na aplicação. Não é necessária outra palavr
 
 ## Privacidade: não indique o URL do site
 
-Se a aplicação pedir nome ou site, indique apenas «ΩGuardian» ou um nome neutro. Nunca introduza o URL da sua instância Symfony. Não use geradores QR online, que receberiam o seu segredo.
+Se a aplicação pedir nome ou site, indique apenas «ΩGuardian» ou um nome neutro. Nunca introduza o URL da sua instância Symfony.
 
 Mantenha-a privada: permite gerar códigos TOTP. Não a partilhe nem faça capturas de ecrã.
 
-O segredo provisório expira após 10 minutos ou 5 códigos incorretos; reiniciar então. Um erro conserva o formulário sem pedir outra vez a palavra-passe. O contador de confirmação é consumido contra repetição. QR SVG usa bacon/bacon-qr-code e ext-iconv sem GD, XMLWriter ou rede. A entrada manual permanece. O URI otpauth usa fornecedor neutro e conta, sem domínio do site. Não partilhar segredo nem URL privado.
+O segredo provisório expira após 10 minutos ou 5 códigos incorretos; reiniciar então. Um erro conserva o formulário sem pedir outra vez a palavra-passe. O contador de confirmação é consumido contra repetição.
 
 ## Recuperação e verificação
 

@@ -5,17 +5,17 @@
 
 ## Dvojfaktorové overenie
 
-Chráňte účet Guardian dočasnými kódmi bez externých QR služieb.
+Každá osoba zaregistruje svoju vlastnú TOTP tajné a potvrdzuje kód.
 
-Každá osoba zaregistruje svoju vlastnú TOTP tajné a potvrdzuje kód. žiadosť MFA bloky profilov prístup pre nezaregistrované účty. QR kód zostáva lokálne na portál. plán administratívne zotavenie pred vyžadovaním tejto ochrany pre celý tím.
+Každá osoba zaregistruje svoju vlastnú TOTP tajné a potvrdzuje kód. žiadosť MFA bloky profilov prístup pre nezaregistrované účty. plán administratívne zotavenie pred vyžadovaním tejto ochrany pre celý tím. Zvoľte ručné nastavenie a zadajte zobrazený kľúč. Použite SHA-1, šesť číslic a interval 30 sekúnd.
 
 ## 1. Potvrďte totožnosť
 
 Zadajte rovnaké heslo ako pri prihlásení do Guardian. Stačí ho zadať raz.
 
-## 2. Naskenujte QR kód v autentifikačnej aplikácii
+## 2. Zadajte kľúč do autentifikačnej aplikácie
 
-Guardian generuje QR lokálne bez požiadaviek na externé služby.
+Zvoľte ručné nastavenie a zadajte zobrazený kľúč. Použite SHA-1, šesť číslic a interval 30 sekúnd.
 
 ## 3. Potvrďte šesťmiestny kód
 
@@ -23,11 +23,11 @@ Zadajte kód z aplikácie. Druhé heslo nie je potrebné.
 
 ## Súkromie: nezadávajte URL webu
 
-Ak aplikácia žiada názov alebo web, uveďte len „ΩGuardian“ alebo neutrálny názov. Nezadávajte URL inštancie Symfony. Nepoužívajte online QR generátory, získali by váš tajný kľúč.
+Ak aplikácia žiada názov alebo web, uveďte len „ΩGuardian“ alebo neutrálny názov. Nezadávajte URL inštancie Symfony.
 
 Uchovajte ho v tajnosti: umožňuje generovať kódy TOTP. Nezdieľajte ho ani nerobte snímky obrazovky.
 
-Dočasný kľúč vyprší za 10 minút alebo po 5 chybných kódoch; potom začnite znova. Chybný kód zachová formulár bez ďalšieho hesla. Potvrdzovacie počítadlo sa spotrebuje proti opakovaniu. SVG QR používa bacon/bacon-qr-code a ext-iconv bez GD, XMLWriter či siete. Ručné zadanie zostáva. URI otpauth používa neutrálneho poskytovateľa a účet, nie doménu webu. Tajomstvo ani súkromný URL nezdieľajte.
+Dočasný kľúč vyprší za 10 minút alebo po 5 chybných kódoch; potom začnite znova. Chybný kód zachová formulár bez ďalšieho hesla. Potvrdzovacie počítadlo sa spotrebuje proti opakovaniu.
 
 ## Recyklácia a overovanie
 

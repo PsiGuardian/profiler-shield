@@ -5,17 +5,17 @@
 
 ## Autentikasi dua faktor
 
-Lindungi akun Guardian dengan kode sementara, tanpa layanan QR eksternal.
+Setiap orang mendaftarkan diri sendiri TOTP Mengidentifikasi dan mengkonfirmasi kode.
 
-Setiap orang mendaftarkan diri sendiri TOTP Mengidentifikasi dan mengkonfirmasi kode. MFA Memblokir profil akses untuk akun yang tidak terdaftar. QR Perencanaan pemulihan administratif sebelum memerlukan perlindungan ini untuk seluruh tim.
+Setiap orang mendaftarkan diri sendiri TOTP Mengidentifikasi dan mengkonfirmasi kode. MFA Memblokir profil akses untuk akun yang tidak terdaftar. Pilih penyiapan manual dan masukkan kunci yang ditampilkan. Gunakan SHA-1, enam digit, periode 30 detik.
 
 ## 1. Konfirmasikan identitas Anda
 
 Masukkan kata sandi yang sama untuk masuk ke Guardian. Hanya diminta sekali selama pengaturan ini.
 
-## 2. Pindai QR ini dengan aplikasi autentikator
+## 2. Masukkan kunci ke aplikasi autentikator
 
-Guardian membuat QR secara lokal tanpa mengirim permintaan ke layanan eksternal.
+Pilih penyiapan manual dan masukkan kunci yang ditampilkan. Gunakan SHA-1, enam digit, periode 30 detik.
 
 ## 3. Konfirmasi kode enam angka
 
@@ -23,11 +23,11 @@ Masukkan kode di aplikasi. Kata sandi kedua tidak diperlukan.
 
 ## Privasi: jangan masukkan URL situs
 
-Jika aplikasi meminta nama atau situs, masukkan hanya “ΩGuardian” atau nama netral. Jangan masukkan URL instans Symfony Anda. Jangan gunakan pembuat QR online karena akan menerima rahasia Anda.
+Jika aplikasi meminta nama atau situs, masukkan hanya “ΩGuardian” atau nama netral. Jangan masukkan URL instans Symfony Anda.
 
 Jaga kerahasiaannya: kunci dapat menghasilkan kode TOTP. Jangan bagikan atau ambil tangkapan layar.
 
-Rahasia sementara kedaluwarsa setelah 10 menit atau 5 kode salah; mulai ulang saat itu. Kesalahan mempertahankan formulir tanpa meminta kata sandi lagi. Penghitung konfirmasi dikonsumsi untuk mencegah pemakaian ulang. SVG QR memakai bacon/bacon-qr-code dan ext-iconv, tanpa GD, XMLWriter atau jaringan. Masukan manual tetap tersedia. URI otpauth memakai penyedia netral dan akun, tanpa domain situs. Jangan bagikan rahasia atau URL privat.
+Rahasia sementara kedaluwarsa setelah 10 menit atau 5 kode salah; mulai ulang saat itu. Kesalahan mempertahankan formulir tanpa meminta kata sandi lagi. Penghitung konfirmasi dikonsumsi untuk mencegah pemakaian ulang.
 
 ## pemulihan dan verifikasi
 
