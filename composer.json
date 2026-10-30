@@ -3,6 +3,13 @@
     "description": "Guardian Profiler Shield : contrôle d’accès autonome, assistant de configuration et protection des diagnostics Symfony.",
     "type": "symfony-bundle",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrew Caron",
+            "homepage": "https://github.com/PsiGuardian",
+            "role": "Maintainer"
+        }
+    ],
     "require": {
         "php": "^8.3",
         "ext-openssl": "*",
