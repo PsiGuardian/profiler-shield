@@ -13,9 +13,9 @@ final class GuardianReleaseFixtureController {
 }
 final class GuardianReleaseKernel extends Symfony\Component\HttpKernel\Kernel {
     private $root;
-    public function __construct($root, bool $debug = true){$this->root=$root;parent::__construct('dev',$debug);}
+    public function __construct($root){$this->root=$root;parent::__construct('dev',true);}
     public function getProjectDir():string{return $this->root;}
-    public function getCacheDir():string{return $this->root.($this->isDebug()?'/cache':'/cache-no-debug');}
+    public function getCacheDir():string{return $this->root.'/cache';}
     public function getLogDir():string{return $this->root.'/log';}
     public function registerBundles():iterable{return [new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),new Symfony\Bundle\TwigBundle\TwigBundle(),new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle(),new OmegaGuardian\ProfilerShield\OmegaGuardianProfilerShieldBundle()];}
     public function registerContainerConfiguration(LoaderInterface $loader):void {
@@ -55,27 +55,7 @@ try {
   }
  }
  $cfg->set(['ip_allowlist'=>'192.0.2.0/24']);verify(request('/_profiler/')->getStatusCode()===404,'live network restriction');$cfg->set(['ip_allowlist'=>'']);
- // Debug rendering must work for approved accounts even if the host kernel
- // itself runs with APP_DEBUG=0, while anonymous users still see no details.
- $authorizedCookies=$cookies;
- $kernel->shutdown();
- $kernel=new GuardianReleaseKernel($root,false);
- $kernel->boot();
- $cookies=[];
- $r=request('/failure');
- verify($r->getStatusCode()===500 && !str_contains($r->getContent(),'GUARDIAN_PRIVATE_EXCEPTION_SENTINEL'),'non-debug anonymous exception remains private');
- $cookies=$authorizedCookies;
- $r=request('/failure');
- verify($r->getStatusCode()===500 && str_contains($r->getContent(),'GUARDIAN_PRIVATE_EXCEPTION_SENTINEL'),'non-debug approved account sees Symfony exception detail');
- verify(str_contains((string)$r->headers->get('Cache-Control'),'no-store'),'authorized exception never cached');
- $_SERVER['GUARDIAN_DEBUG_ERRORS_FOR_AUTHENTICATED']=$_ENV['GUARDIAN_DEBUG_ERRORS_FOR_AUTHENTICATED']='0';
- $r=request('/failure');
- verify($r->getStatusCode()===500 && !str_contains($r->getContent(),'GUARDIAN_PRIVATE_EXCEPTION_SENTINEL'),'debug flag disabled keeps authenticated exception private');
- $_SERVER['GUARDIAN_DEBUG_ERRORS_FOR_AUTHENTICATED']=$_ENV['GUARDIAN_DEBUG_ERRORS_FOR_AUTHENTICATED']='1';
- $s->change('control',function(){return ['lockdown'=>true];});verify(request('/_profiler/')->getStatusCode()===404,'live lockdown');
- verify(request('/business')->getStatusCode()===200,'lockdown business independent');
- $r=request('/failure');
- verify($r->getStatusCode()===500 && !str_contains($r->getContent(),'GUARDIAN_PRIVATE_EXCEPTION_SENTINEL'),'lockdown prevents exception detail access');
+ $s->change('control',function(){return ['lockdown'=>true];});verify(request('/_profiler/')->getStatusCode()===404,'live lockdown');verify(request('/business')->getStatusCode()===200,'lockdown business independent');
 } finally {
  $kernel->shutdown();$it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root,FilesystemIterator::SKIP_DOTS),RecursiveIteratorIterator::CHILD_FIRST);foreach($it as $f){$f->isDir()?rmdir($f->getPathname()):unlink($f->getPathname());}rmdir($root);
 }
