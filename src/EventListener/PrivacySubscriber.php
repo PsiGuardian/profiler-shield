@@ -9,7 +9,6 @@ use OmegaGuardian\ProfilerShield\Security\PublicErrorRenderer;
 use OmegaGuardian\ProfilerShield\Security\PublicErrorRegistry;
 use OmegaGuardian\ProfilerShield\Security\SafeNativeRenderer;
 use OmegaGuardian\ProfilerShield\Util\Env;
-use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -66,29 +65,11 @@ final class PrivacySubscriber implements EventSubscriberInterface
     {
         if (!$event->isMainRequest()) { return; }
         $request=$event->getRequest();
-        // A Guardian-approved developer may inspect the original Symfony
-        // exception even when APP_DEBUG=0. Do not enable kernel debug globally:
-        // that could expose traces in unrelated routes or error handlers.
+        // Autorisé : Symfony conserve son propre gestionnaire d'exceptions.
+        // C'est essentiel pour restaurer le profiler et les détails d'erreur
+        // en mode dev, SANS les publier pour un visiteur anonyme.
         if (Env::get('GUARDIAN_DEBUG_ERRORS_FOR_AUTHENTICATED') === '1'
             && $this->diagnosticAccess->allowed($request)) {
-            if (!GuardianSubscriber::isDiagnosticPath($request->getPathInfo())
-                && $this->safeNative->format($request) === 'html') {
-                try {
-                    $exception = (new HtmlErrorRenderer(true))->render($event->getThrowable());
-                    $response = new Response($exception->getAsString(), $exception->getStatusCode(), [
-                        'Content-Type' => 'text/html; charset=UTF-8',
-                        'Cache-Control' => 'private, no-store, max-age=0',
-                        'Referrer-Policy' => 'no-referrer',
-                        'X-Content-Type-Options' => 'nosniff',
-                    ]);
-                    $this->preserveHttpHeaders($response, $event->getThrowable());
-                    $event->setResponse($response);
-                    return;
-                } catch (\Throwable) {
-                    // Never fail open: Symfony's own configured error handler
-                    // remains the fallback when the debug renderer fails.
-                }
-            }
             return;
         }
         // Sur les routes du profiler, refuser les exceptions publiques même
